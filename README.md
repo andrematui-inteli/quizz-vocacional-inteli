@@ -1,0 +1,1 @@
+# quizz-vocacional-inteli
