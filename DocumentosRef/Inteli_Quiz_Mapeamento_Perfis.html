@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapeamento de Perfis · Quiz Vocacional Inteli</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #2A1F47;
+    --ink-2: #3A2E5C;
+    --ink-soft: #4A3F67;
+    --coral: #EE4B42;
+    --coral-soft: #F5A8A3;
+    --paper: #ECEDEE;
+    --paper-warm: #F4F1ED;
+    --line: rgba(42, 31, 71, 0.14);
+    --line-strong: rgba(42, 31, 71, 0.28);
+    /* tipo colors */
+    --c-ancora: #2E7D5C;
+    --c-fronteira: #C68A2E;
+    --c-distante: #8B6FAB;
+    --c-orfao: #B83A52;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--paper);
+    font-family: 'Inter', sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    background-image: radial-gradient(circle, rgba(42, 31, 71, 0.05) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+
+  .container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 36px 32px 80px;
+  }
+
+  /* HEADER */
+  header.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 36px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: var(--coral);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-size: 38px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--coral);
+    font-weight: 400;
+  }
+  .header-meta {
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    line-height: 1.7;
+    letter-spacing: 0.06em;
+  }
+  .header-meta strong { color: var(--ink); font-weight: 500; }
+
+  .lead {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: 780px;
+    margin-bottom: 36px;
+  }
+
+  /* SECTION HEADINGS */
+  .section-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin: 48px 0 20px;
+  }
+  .section-heading:first-child { margin-top: 0; }
+  .section-heading .num {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 30px;
+    color: var(--coral);
+    line-height: 1;
+  }
+  .section-heading h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 22px;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+  }
+  .section-heading .rule {
+    flex: 1;
+    height: 1px;
+    background: var(--line-strong);
+  }
+
+  /* EXPLORER: selectors + main panel */
+  .explorer {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 28px 28px 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 0 rgba(42,31,71,0.04), 0 6px 28px rgba(42,31,71,0.06);
+  }
+  .selectors {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px dashed var(--line-strong);
+  }
+  .selector h3 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--coral);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .opt {
+    border: 1px solid var(--line);
+    background: var(--paper-warm);
+    padding: 9px 13px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-family: 'Inter', sans-serif;
+    transition: all 0.12s ease;
+    text-align: left;
+    line-height: 1.2;
+  }
+  .opt:hover {
+    border-color: var(--coral-soft);
+    background: white;
+    color: var(--ink);
+  }
+  .opt.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: white;
+    font-weight: 500;
+  }
+  .opt.active::before {
+    content: '● ';
+    color: var(--coral);
+  }
+
+  /* MAIN PANEL */
+  .main-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+  .panel-left, .panel-right {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .profile-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  .tag-ancora    { background: rgba(46,125,92,0.12);  color: var(--c-ancora); }
+  .tag-fronteira { background: rgba(198,138,46,0.14); color: var(--c-fronteira); }
+  .tag-distante  { background: rgba(139,111,171,0.14); color: var(--c-distante); }
+  .tag-orfao     { background: rgba(184,58,82,0.14);  color: var(--c-orfao); }
+
+  .profile-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 1.1;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+  }
+  .profile-coords {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    letter-spacing: 0.05em;
+    line-height: 1.6;
+  }
+  .profile-coords .lab { color: var(--coral); }
+
+  .verdict-card {
+    border-left: 4px solid var(--coral);
+    padding: 14px 18px;
+    background: var(--paper-warm);
+    border-radius: 0 8px 8px 0;
+  }
+  .verdict-card .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--coral);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .verdict-card .course {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 4px;
+    line-height: 1.1;
+  }
+  .verdict-card .second {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+  .verdict-card .second strong { color: var(--ink); font-weight: 500; }
+
+  .interpretation {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    padding: 0 4px;
+  }
+
+  /* distance bars */
+  .distances h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--ink);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .dist-row {
+    display: grid;
+    grid-template-columns: 90px 1fr 36px;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .dist-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .dist-bar-track {
+    height: 8px;
+    background: var(--paper-warm);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  .dist-bar-fill {
+    height: 100%;
+    background: var(--ink);
+    border-radius: 4px;
+    transition: width 0.25s ease;
+  }
+  .dist-bar-fill.closest { background: var(--coral); }
+  .dist-bar-fill.second  { background: var(--ink); }
+  .dist-bar-fill.other   { background: rgba(42,31,71,0.3); }
+  .dist-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    text-align: right;
+  }
+
+  /* FEEDBACK preview */
+  .feedback-preview {
+    border: 1px dashed var(--line-strong);
+    padding: 14px 16px;
+    border-radius: 8px;
+    background: white;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+  .feedback-preview .lab {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--coral);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .feedback-preview p { margin-bottom: 8px; }
+  .feedback-preview p:last-child { margin-bottom: 0; }
+  .feedback-preview em {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--ink);
+    font-size: 14px;
+  }
+
+  /* OVERVIEW GRID */
+  .legend-row {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding: 14px 16px;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+  }
+  .legend-row .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .legend-row .swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+  }
+  .legend-row .legend-item strong {
+    color: var(--ink);
+    font-weight: 600;
+    margin-right: 4px;
+  }
+
+  .filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .filter-btn {
+    border: 1px solid var(--line-strong);
+    background: white;
+    padding: 7px 14px;
+    border-radius: 18px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    transition: all 0.12s ease;
+  }
+  .filter-btn:hover { border-color: var(--coral); color: var(--coral); }
+  .filter-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: white;
+  }
+  .filter-btn .count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    opacity: 0.7;
+    margin-left: 4px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .card {
+    background: white;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--ink);
+    border-radius: 8px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.12s ease;
+    text-align: left;
+    font-family: inherit;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(42,31,71,0.1);
+    border-color: var(--coral-soft);
+  }
+  .card.is-ancora    { border-left-color: var(--c-ancora); }
+  .card.is-fronteira { border-left-color: var(--c-fronteira); }
+  .card.is-distante  { border-left-color: var(--c-distante); }
+  .card.is-orfao     { border-left-color: var(--c-orfao); }
+
+  .card.selected {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .card.selected .card-course { color: white; }
+  .card.selected .card-coords { color: rgba(236,237,238,0.7); }
+  .card.selected .card-second { color: rgba(236,237,238,0.6); }
+
+  .card-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .card.is-ancora .card-tag    { color: var(--c-ancora); }
+  .card.is-fronteira .card-tag { color: var(--c-fronteira); }
+  .card.is-distante .card-tag  { color: var(--c-distante); }
+  .card.is-orfao .card-tag     { color: var(--c-orfao); }
+  .card.selected .card-tag { color: var(--coral); }
+
+  .card-course {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 17px;
+    color: var(--ink);
+    line-height: 1.1;
+    margin-bottom: 6px;
+    letter-spacing: -0.005em;
+  }
+  .card-coords {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+  }
+  .card-second {
+    font-size: 10.5px;
+    color: var(--ink-soft);
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed rgba(42,31,71,0.1);
+  }
+  .card.selected .card-second { border-top-color: rgba(236,237,238,0.15); }
+
+  /* STATS panel */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .stat {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+  }
+  .stat.s-ancora::before    { background: var(--c-ancora); }
+  .stat.s-fronteira::before { background: var(--c-fronteira); }
+  .stat.s-distante::before  { background: var(--c-distante); }
+  .stat.s-orfao::before     { background: var(--c-orfao); }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+  .stat-desc {
+    font-size: 11px;
+    color: var(--ink-soft);
+    line-height: 1.4;
+    margin-top: 8px;
+  }
+
+  footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-strong);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--ink-soft);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 920px) {
+    .selectors { grid-template-columns: 1fr; }
+    .main-panel { grid-template-columns: 1fr; }
+    .grid { grid-template-columns: repeat(2, 1fr); }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="top">
+    <div>
+      <div class="eyebrow">Documento de Trabalho · Companion das perguntas</div>
+      <h1>Mapeamento de <em>Perfis</em></h1>
+    </div>
+    <div class="header-meta">
+      V01 &nbsp;·&nbsp; <strong>JAN 2026</strong><br>
+      36 perfis combinatórios<br>
+      3 dimensões · 5 cursos
+    </div>
+  </header>
+
+  <p class="lead">
+    Cada combinação possível das três dimensões gera um perfil. Os 36 perfis foram classificados pela distância ponderada até a âncora de cada curso. Use o explorador para examinar uma combinação específica, ou navegue a visão geral para ver todos juntos, filtrados por tipo ou por curso indicado.
+  </p>
+
+  <!-- ============ STATS ============ -->
+  <div class="section-heading">
+    <span class="num">01</span>
+    <h2>Distribuição dos 36 perfis</h2>
+    <span class="rule"></span>
+  </div>
+
+  <div class="stats">
+    <div class="stat s-ancora">
+      <div class="stat-num">21</div>
+      <div class="stat-label">Âncora / Adjacente</div>
+      <div class="stat-desc">Perfil cai claramente dentro de um curso. Indicação com alta confiança.</div>
+    </div>
+    <div class="stat s-fronteira">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Fronteira</div>
+      <div class="stat-desc">Dois cursos quase empatados. A pergunta adaptativa desempata.</div>
+    </div>
+    <div class="stat s-distante">
+      <div class="stat-num">10</div>
+      <div class="stat-label">Adjacente Distante</div>
+      <div class="stat-desc">Curso claro mas com tensão. Devolutiva precisa reconhecer a nuance.</div>
+    </div>
+    <div class="stat s-orfao">
+      <div class="stat-num">2</div>
+      <div class="stat-label">Órfão</div>
+      <div class="stat-desc">Combinação que nenhum curso atende bem. Feedback especial.</div>
+    </div>
+  </div>
+
+  <!-- ============ EXPLORER ============ -->
+  <div class="section-heading">
+    <span class="num">02</span>
+    <h2>Explorador interativo</h2>
+    <span class="rule"></span>
+  </div>
+
+  <div class="explorer">
+    <div class="selectors">
+      <div class="selector">
+        <h3>Foco de Impacto</h3>
+        <div class="options" id="opt-foco"></div>
+      </div>
+      <div class="selector">
+        <h3>Estilo de Pensamento</h3>
+        <div class="options" id="opt-estilo"></div>
+      </div>
+      <div class="selector">
+        <h3>Camada Técnica</h3>
+        <div class="options" id="opt-camada"></div>
+      </div>
+    </div>
+
+    <div class="main-panel">
+      <div class="panel-left">
+        <div>
+          <span class="profile-tag" id="profile-tag">—</span>
+        </div>
+        <div class="profile-headline" id="profile-headline">—</div>
+        <div class="profile-coords" id="profile-coords">—</div>
+
+        <div class="verdict-card">
+          <div class="label">Curso Indicado</div>
+          <div class="course" id="verdict-course">—</div>
+          <div class="second" id="verdict-second">—</div>
+        </div>
+
+        <div class="interpretation" id="interpretation">—</div>
+      </div>
+
+      <div class="panel-right">
+        <div class="distances">
+          <h4>Distâncias até cada curso</h4>
+          <div id="distances-list"></div>
+        </div>
+        <div class="feedback-preview" id="feedback-preview">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ OVERVIEW ============ -->
+  <div class="section-heading">
+    <span class="num">03</span>
+    <h2>Visão geral · os 36 perfis</h2>
+    <span class="rule"></span>
+  </div>
+
+  <div class="legend-row">
+    <div class="legend-item"><span class="swatch" style="background:var(--c-ancora)"></span><strong>Âncora</strong> indicação confiável</div>
+    <div class="legend-item"><span class="swatch" style="background:var(--c-fronteira)"></span><strong>Fronteira</strong> precisa adaptativa</div>
+    <div class="legend-item"><span class="swatch" style="background:var(--c-distante)"></span><strong>Adjacente distante</strong> tensão no perfil</div>
+    <div class="legend-item"><span class="swatch" style="background:var(--c-orfao)"></span><strong>Órfão</strong> nenhum curso encaixa bem</div>
+  </div>
+
+  <div class="filters" id="filters"></div>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>
+    <span>INTELI · QUIZ VOCACIONAL · MAPEAMENTO DE PERFIS</span>
+    <span>V01 — JAN 2026</span>
+  </footer>
+
+</div>
+
+<script>
+// ============================================================
+// DATA — 36 profiles pre-computed
+// ============================================================
+const FOCO_LABELS   = ["Pessoas/Decisão", "Produto/Usuários", "Descoberta/Capacidades"];
+const ESTILO_LABELS = ["Integrador", "Construtor", "Investigador"];
+const CAMADA_LABELS = ["Negócio", "Negócio↔Aplicação", "Aplicação digital", "Hardware/Fundamentos"];
+
+const PERFIS = [{"perfil":{"foco":0,"estilo":0,"camada":0},"curso_1":"ADM Tech","dist_1":0.0,"curso_2":"SI","dist_2":1.2,"gap":1.2,"tipo":"âncora-adjacente","all_dists":[["ADM Tech",0.0],["SI",1.2],["ES",4.7],["EC",5.9],["CC",6.9]],"perfil_legivel":{"foco":"Pessoas/Decisão","estilo":"Integrador","camada":"Negócio"}},{"perfil":{"foco":0,"estilo":0,"camada":1},"curso_1":"SI","dist_1":0.0,"curso_2":"ADM Tech","dist_2":1.2,"gap":1.2,"tipo":"âncora-adjacente","all_dists":[["SI",0.0],["ADM Tech",1.2],["ES",3.5],["EC",4.7],["CC",5.7]],"perfil_legivel":{"foco":"Pessoas/Decisão","estilo":"Integrador","camada":"Negócio↔Aplicação"}},{"perfil":{"foco":0,"estilo":0,"camada":2},"curso_1":"SI","dist_1":1.2,"curso_2":"ES","dist_2":2.3,"gap":1.1,"tipo":"âncora-adjacente","all_dists":[["SI",1.2],["ES",2.3],["ADM Tech",2.4],["EC",3.5],["CC",4.5]],"perfil_legivel":{"foco":"Pessoas/Decisão","estilo":"Integrador","camada":"Aplicação digital"}},{"perfil":{"foco":0,"estilo":0,"camada":3},"curso_1":"EC","dist_1":2.3,"curso_2":"SI","dist_2":2.4,"gap":0.1,"tipo":"adjacente-distante","all_dists":[["EC",2.3],["SI",2.4],["CC",3.3],["ES",3.5],["ADM Tech",3.6]],"perfil_legivel":{"foco":"Pessoas/Decisão","estilo":"Integrador","camada":"Hardware/Fundamentos"}},{"perfil":{"foco":0,"estilo":1,"camada":0},"curso_1":"ADM Tech","dist_1":1.3,"curso_2":"SI","dist_2":2.5,"gap":1.2,"tipo":"âncora-adjacente","all_dists":[["ADM Tech",1.3],["SI",2.5],["ES",3.4],["EC",4.6],["CC",6.9]],"perfil_legivel":{"foco":"Pessoas/Decisão","estilo":"Construtor","camada":"Negócio"}},{"perfil":{"foco":0,"estilo":1,"camada":1},"curso_1":"SI","dist_1":1.3,"curso_2":"ES","dist_2":2.2,"gap":0.9,"tipo":"âncora-adjacente","all_dists":[["SI",1.3],["ES",2.2],["ADM Tech",2.5],["EC",3.4],["CC",5.7]],"perfil_legivel":{"foco":"Pessoas/Decisão","estilo":"Construtor","camada":"Negócio↔Aplicação"}},{"perfil":{"foco":0,"estilo":1,"camada":2},"curso_1":"ES","dist_1":1.0,"curso_2":"EC","dist_2":2.2,"gap":1.2,"tipo":"âncora-adjacente","all_dists":[["ES",1.0],["EC",2.2],["SI",2.5],["ADM Tech",3.7],["CC",4.5]],"perfil_legivel":{"foco":"Pessoas/Decisão","estilo":"Construtor","camada":"Aplicação digital"}},{"perfil":{"foco":0,"estilo":1,"camada":3},"curso_1":"EC","dist_1":1.0,"curso_2":"ES","dist_2":2.2,"gap":1.2,"tipo":"âncora-adjacente","all_dists":[["EC",1.0],["ES",2.2],["CC",3.3],["SI",3.7],["ADM Tech",4.9]],"perfil_legivel":{"foco":"Pessoas/Decisão","estilo":"Construtor","camada":"Hardware/Fundamentos"}},{"perfil":{"foco":0,"estilo":2,"camada":0},"curso_1":"ADM Tech","dist_1":1.3,"curso_2":"SI","dist_2":2.5,"gap":1.2,"tipo":"âncora-adjacente","all_dists":[["ADM Tech",1.3],["SI",2.5],["ES",4.7],["CC",5.6],["EC",5.9]],"perfil_legivel":{"foco":"Pessoas/Decisão","estilo":"Investigador","camada":"Negócio"}},{"perfil":{"foco":0,"estilo":2,"camada":1},"curso_1":"SI","dist_1":1.3,"curso_2":"ADM Tech","dist_2":2.5,"gap":1.2,"tipo":"âncora-adjacente","all_dists":[["SI",1.3],["ADM Tech",2.5],["ES",3.5],["CC",4.4],["EC",4.7]],"perfil_legivel":{"foco":"Pessoas/Decisão","estilo":"Investigador","camada":"Negócio↔Aplicação"}},{"perfil":{"foco":0,"estilo":2,"camada":2},"curso_1":"ES","dist_1":2.3,"curso_2":"SI","dist_2":2.5,"gap":0.2,"tipo":"adjacente-distante","all_dists":[["ES",2.3],["SI",2.5],["CC",3.2],["EC",3.5],["ADM Tech",3.7]],"perfil_legivel":{"foco":"Pessoas/Decisão","estilo":"Investigador","camada":"Aplicação digital"}},{"perfil":{"foco":0,"estilo":2,"camada":3},"curso_1":"CC","dist_1":2.0,"curso_2":"EC","dist_2":2.3,"gap":0.3,"tipo":"fronteira","all_dists":[["CC",2.0],["EC",2.3],["ES",3.5],["SI",3.7],["ADM Tech",4.9]],"perfil_legivel":{"foco":"Pessoas/Decisão","estilo":"Investigador","camada":"Hardware/Fundamentos"}},{"perfil":{"foco":1,"estilo":0,"camada":0},"curso_1":"ADM Tech","dist_1":1.0,"curso_2":"SI","dist_2":2.2,"gap":1.2,"tipo":"âncora-adjacente","all_dists":[["ADM Tech",1.0],["SI",2.2],["ES",3.7],["EC",4.9],["CC",5.9]],"perfil_legivel":{"foco":"Produto/Usuários","estilo":"Integrador","camada":"Negócio"}},{"perfil":{"foco":1,"estilo":0,"camada":1},"curso_1":"SI","dist_1":1.0,"curso_2":"ADM Tech","dist_2":2.2,"gap":1.2,"tipo":"âncora-adjacente","all_dists":[["SI",1.0],["ADM Tech",2.2],["ES",2.5],["EC",3.7],["CC",4.7]],"perfil_legivel":{"foco":"Produto/Usuários","estilo":"Integrador","camada":"Negócio↔Aplicação"}},{"perfil":{"foco":1,"estilo":0,"camada":2},"curso_1":"ES","dist_1":1.3,"curso_2":"SI","dist_2":2.2,"gap":0.9,"tipo":"âncora-adjacente","all_dists":[["ES",1.3],["SI",2.2],["EC",2.5],["ADM Tech",3.4],["CC",3.5]],"perfil_legivel":{"foco":"Produto/Usuários","estilo":"Integrador","camada":"Aplicação digital"}},{"perfil":{"foco":1,"estilo":0,"camada":3},"curso_1":"EC","dist_1":1.3,"curso_2":"CC","dist_2":2.3,"gap":1.0,"tipo":"âncora-adjacente","all_dists":[["EC",1.3],["CC",2.3],["ES",2.5],["SI",3.4],["ADM Tech",4.6]],"perfil_legivel":{"foco":"Produto/Usuários","estilo":"Integrador","camada":"Hardware/Fundamentos"}},{"perfil":{"foco":1,"estilo":1,"camada":0},"curso_1":"ADM Tech","dist_1":2.3,"curso_2":"ES","dist_2":2.4,"gap":0.1,"tipo":"adjacente-distante","all_dists":[["ADM Tech",2.3],["ES",2.4],["SI",3.5],["EC",3.6],["CC",5.9]],"perfil_legivel":{"foco":"Produto/Usuários","estilo":"Construtor","camada":"Negócio"}},{"perfil":{"foco":1,"estilo":1,"camada":1},"curso_1":"ES","dist_1":1.2,"curso_2":"SI","dist_2":2.3,"gap":1.1,"tipo":"âncora-adjacente","all_dists":[["ES",1.2],["SI",2.3],["EC",2.4],["ADM Tech",3.5],["CC",4.7]],"perfil_legivel":{"foco":"Produto/Usuários","estilo":"Construtor","camada":"Negócio↔Aplicação"}},{"perfil":{"foco":1,"estilo":1,"camada":2},"curso_1":"ES","dist_1":0.0,"curso_2":"EC","dist_2":1.2,"gap":1.2,"tipo":"âncora-adjacente","all_dists":[["ES",0.0],["EC",1.2],["CC",3.5],["SI",3.5],["ADM Tech",4.7]],"perfil_legivel":{"foco":"Produto/Usuários","estilo":"Construtor","camada":"Aplicação digital"}},{"perfil":{"foco":1,"estilo":1,"camada":3},"curso_1":"EC","dist_1":0.0,"curso_2":"ES","dist_2":1.2,"gap":1.2,"tipo":"âncora-adjacente","all_dists":[["EC",0.0],["ES",1.2],["CC",2.3],["SI",4.7],["ADM Tech",5.9]],"perfil_legivel":{"foco":"Produto/Usuários","estilo":"Construtor","camada":"Hardware/Fundamentos"}},{"perfil":{"foco":1,"estilo":2,"camada":0},"curso_1":"ADM Tech","dist_1":2.3,"curso_2":"SI","dist_2":3.5,"gap":1.2,"tipo":"adjacente-distante","all_dists":[["ADM Tech",2.3],["SI",3.5],["ES",3.7],["CC",4.6],["EC",4.9]],"perfil_legivel":{"foco":"Produto/Usuários","estilo":"Investigador","camada":"Negócio"}},{"perfil":{"foco":1,"estilo":2,"camada":1},"curso_1":"SI","dist_1":2.3,"curso_2":"ES","dist_2":2.5,"gap":0.2,"tipo":"adjacente-distante","all_dists":[["SI",2.3],["ES",2.5],["CC",3.4],["ADM Tech",3.5],["EC",3.7]],"perfil_legivel":{"foco":"Produto/Usuários","estilo":"Investigador","camada":"Negócio↔Aplicação"}},{"perfil":{"foco":1,"estilo":2,"camada":2},"curso_1":"ES","dist_1":1.3,"curso_2":"CC","dist_2":2.2,"gap":0.9,"tipo":"âncora-adjacente","all_dists":[["ES",1.3],["CC",2.2],["EC",2.5],["SI",3.5],["ADM Tech",4.7]],"perfil_legivel":{"foco":"Produto/Usuários","estilo":"Investigador","camada":"Aplicação digital"}},{"perfil":{"foco":1,"estilo":2,"camada":3},"curso_1":"CC","dist_1":1.0,"curso_2":"EC","dist_2":1.3,"gap":0.3,"tipo":"fronteira","all_dists":[["CC",1.0],["EC",1.3],["ES",2.5],["SI",4.7],["ADM Tech",5.9]],"perfil_legivel":{"foco":"Produto/Usuários","estilo":"Investigador","camada":"Hardware/Fundamentos"}},{"perfil":{"foco":2,"estilo":0,"camada":0},"curso_1":"ADM Tech","dist_1":2.0,"curso_2":"SI","dist_2":3.2,"gap":1.2,"tipo":"adjacente-distante","all_dists":[["ADM Tech",2.0],["SI",3.2],["ES",4.7],["CC",4.9],["EC",5.9]],"perfil_legivel":{"foco":"Descoberta/Capacidades","estilo":"Integrador","camada":"Negócio"}},{"perfil":{"foco":2,"estilo":0,"camada":1},"curso_1":"SI","dist_1":2.0,"curso_2":"ADM Tech","dist_2":3.2,"gap":1.2,"tipo":"adjacente-distante","all_dists":[["SI",2.0],["ADM Tech",3.2],["ES",3.5],["CC",3.7],["EC",4.7]],"perfil_legivel":{"foco":"Descoberta/Capacidades","estilo":"Integrador","camada":"Negócio↔Aplicação"}},{"perfil":{"foco":2,"estilo":0,"camada":2},"curso_1":"ES","dist_1":2.3,"curso_2":"CC","dist_2":2.5,"gap":0.2,"tipo":"adjacente-distante","all_dists":[["ES",2.3],["CC",2.5],["SI",3.2],["EC",3.5],["ADM Tech",4.4]],"perfil_legivel":{"foco":"Descoberta/Capacidades","estilo":"Integrador","camada":"Aplicação digital"}},{"perfil":{"foco":2,"estilo":0,"camada":3},"curso_1":"CC","dist_1":1.3,"curso_2":"EC","dist_2":2.3,"gap":1.0,"tipo":"âncora-adjacente","all_dists":[["CC",1.3],["EC",2.3],["ES",3.5],["SI",4.4],["ADM Tech",5.6]],"perfil_legivel":{"foco":"Descoberta/Capacidades","estilo":"Integrador","camada":"Hardware/Fundamentos"}},{"perfil":{"foco":2,"estilo":1,"camada":0},"curso_1":"ADM Tech","dist_1":3.3,"curso_2":"ES","dist_2":3.4,"gap":0.1,"tipo":"órfão","all_dists":[["ADM Tech",3.3],["ES",3.4],["SI",4.5],["EC",4.6],["CC",4.9]],"perfil_legivel":{"foco":"Descoberta/Capacidades","estilo":"Construtor","camada":"Negócio"}},{"perfil":{"foco":2,"estilo":1,"camada":1},"curso_1":"ES","dist_1":2.2,"curso_2":"SI","dist_2":3.3,"gap":1.1,"tipo":"adjacente-distante","all_dists":[["ES",2.2],["SI",3.3],["EC",3.4],["CC",3.7],["ADM Tech",4.5]],"perfil_legivel":{"foco":"Descoberta/Capacidades","estilo":"Construtor","camada":"Negócio↔Aplicação"}},{"perfil":{"foco":2,"estilo":1,"camada":2},"curso_1":"ES","dist_1":1.0,"curso_2":"EC","dist_2":2.2,"gap":1.2,"tipo":"âncora-adjacente","all_dists":[["ES",1.0],["EC",2.2],["CC",2.5],["SI",4.5],["ADM Tech",5.7]],"perfil_legivel":{"foco":"Descoberta/Capacidades","estilo":"Construtor","camada":"Aplicação digital"}},{"perfil":{"foco":2,"estilo":1,"camada":3},"curso_1":"EC","dist_1":1.0,"curso_2":"CC","dist_2":1.3,"gap":0.3,"tipo":"fronteira","all_dists":[["EC",1.0],["CC",1.3],["ES",2.2],["SI",5.7],["ADM Tech",6.9]],"perfil_legivel":{"foco":"Descoberta/Capacidades","estilo":"Construtor","camada":"Hardware/Fundamentos"}},{"perfil":{"foco":2,"estilo":2,"camada":0},"curso_1":"ADM Tech","dist_1":3.3,"curso_2":"CC","dist_2":3.6,"gap":0.3,"tipo":"órfão","all_dists":[["ADM Tech",3.3],["CC",3.6],["SI",4.5],["ES",4.7],["EC",5.9]],"perfil_legivel":{"foco":"Descoberta/Capacidades","estilo":"Investigador","camada":"Negócio"}},{"perfil":{"foco":2,"estilo":2,"camada":1},"curso_1":"CC","dist_1":2.4,"curso_2":"SI","dist_2":3.3,"gap":0.9,"tipo":"adjacente-distante","all_dists":[["CC",2.4],["SI",3.3],["ES",3.5],["ADM Tech",4.5],["EC",4.7]],"perfil_legivel":{"foco":"Descoberta/Capacidades","estilo":"Investigador","camada":"Negócio↔Aplicação"}},{"perfil":{"foco":2,"estilo":2,"camada":2},"curso_1":"CC","dist_1":1.2,"curso_2":"ES","dist_2":2.3,"gap":1.1,"tipo":"âncora-adjacente","all_dists":[["CC",1.2],["ES",2.3],["EC",3.5],["SI",4.5],["ADM Tech",5.7]],"perfil_legivel":{"foco":"Descoberta/Capacidades","estilo":"Investigador","camada":"Aplicação digital"}},{"perfil":{"foco":2,"estilo":2,"camada":3},"curso_1":"CC","dist_1":0.0,"curso_2":"EC","dist_2":2.3,"gap":2.3,"tipo":"âncora-adjacente","all_dists":[["CC",0.0],["EC",2.3],["ES",3.5],["SI",5.7],["ADM Tech",6.9]],"perfil_legivel":{"foco":"Descoberta/Capacidades","estilo":"Investigador","camada":"Hardware/Fundamentos"}}];
+
+// ============================================================
+// Interpretations and feedback templates per profile
+// ============================================================
+function buildInterpretation(p) {
+  const f = p.perfil_legivel.foco;
+  const e = p.perfil_legivel.estilo;
+  const c = p.perfil_legivel.camada;
+
+  const focoFrag = {
+    "Pessoas/Decisão": "movido pelo impacto em pessoas e decisões",
+    "Produto/Usuários": "movido por criar coisas que outros usem",
+    "Descoberta/Capacidades": "movido por explorar o que ainda não existe"
+  }[f];
+
+  const estiloFrag = {
+    "Integrador": "que conecta áreas e enxerga o todo",
+    "Construtor": "que aprende fazendo, prototipando, iterando",
+    "Investigador": "que prefere entender a fundo antes de construir"
+  }[e];
+
+  const camadaFrag = {
+    "Negócio": "atuando na camada de negócio, com a tecnologia como ferramenta",
+    "Negócio↔Aplicação": "entre o negócio e os sistemas que o sustentam",
+    "Aplicação digital": "construindo produtos digitais que rodam para usuários",
+    "Hardware/Fundamentos": "indo fundo na tecnologia por dentro"
+  }[c];
+
+  return `Você é alguém ${focoFrag}, ${estiloFrag}, ${camadaFrag}.`;
+}
+
+function buildFeedback(p) {
+  const tipo = p.tipo;
+  const c1 = p.curso_1;
+  const c2 = p.curso_2;
+  const gap = p.gap;
+
+  if (tipo === "âncora-adjacente") {
+    return {
+      lab: "Devolutiva — alta confiança",
+      body: `<p><em>“${buildInterpretation(p)}”</em></p><p>Esse perfil aponta com clareza para <strong>${c1}</strong>. ${c2} aparece como segunda opção compatível, com nuance distinta — útil mencionar para o aluno entender as fronteiras.</p>`
+    };
+  }
+
+  if (tipo === "fronteira") {
+    return {
+      lab: "Devolutiva — disparar adaptativa",
+      body: `<p><em>“${buildInterpretation(p)}”</em></p><p>Perfil quase empatado entre <strong>${c1}</strong> e <strong>${c2}</strong> (gap de apenas ${gap}). Dispare a pergunta adaptativa correspondente para desempatar antes de mostrar resultado.</p>`
+    };
+  }
+
+  if (tipo === "adjacente-distante") {
+    return {
+      lab: "Devolutiva — nuançada",
+      body: `<p><em>“${buildInterpretation(p)}”</em></p><p>O curso mais próximo é <strong>${c1}</strong>, mas o perfil tem tensão — não está no centro do curso. A devolutiva precisa reconhecer essa singularidade: mencionar onde a pessoa diverge da âncora e como isso pode virar diferencial dentro do curso.</p>`
+    };
+  }
+
+  // órfão
+  return {
+    lab: "Devolutiva — perfil órfão",
+    body: `<p><em>“${buildInterpretation(p)}”</em></p><p><strong>Combinação rara que nenhum dos 5 cursos atende plenamente.</strong> Indique <strong>${c1}</strong> como o menos distante, mas reconheça abertamente a singularidade. Sugira conversa com a equipe de orientação para desenhar caminho personalizado — esse perfil é um lead consultivo, não um match automático.</p>`
+  };
+}
+
+// ============================================================
+// Selectors and explorer state
+// ============================================================
+let state = { foco: 0, estilo: 0, camada: 0 };
+
+function buildSelectors() {
+  const buildGroup = (containerId, labels, dimKey) => {
+    const el = document.getElementById(containerId);
+    el.innerHTML = '';
+    labels.forEach((label, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.textContent = label;
+      btn.dataset.dim = dimKey;
+      btn.dataset.idx = idx;
+      if (state[dimKey] === idx) btn.classList.add('active');
+      btn.addEventListener('click', () => {
+        state[dimKey] = idx;
+        buildSelectors();
+        renderExplorer();
+        renderGrid(); // updates the "selected" marker in the grid
+      });
+      el.appendChild(btn);
+    });
+  };
+  buildGroup('opt-foco',   FOCO_LABELS,   'foco');
+  buildGroup('opt-estilo', ESTILO_LABELS, 'estilo');
+  buildGroup('opt-camada', CAMADA_LABELS, 'camada');
+}
+
+function findProfile(foco, estilo, camada) {
+  return PERFIS.find(p =>
+    p.perfil.foco === foco && p.perfil.estilo === estilo && p.perfil.camada === camada
+  );
+}
+
+const TYPE_TO_CLASS = {
+  "âncora-adjacente": "ancora",
+  "fronteira": "fronteira",
+  "adjacente-distante": "distante",
+  "órfão": "orfao"
+};
+const TYPE_LABEL = {
+  "âncora-adjacente": "Âncora · Indicação confiável",
+  "fronteira": "Fronteira · Disparar adaptativa",
+  "adjacente-distante": "Adjacente distante · Tensão no perfil",
+  "órfão": "Órfão · Nenhum curso encaixa bem"
+};
+
+function renderExplorer() {
+  const p = findProfile(state.foco, state.estilo, state.camada);
+  const cls = TYPE_TO_CLASS[p.tipo];
+
+  // tag
+  const tagEl = document.getElementById('profile-tag');
+  tagEl.className = 'profile-tag tag-' + cls;
+  tagEl.textContent = TYPE_LABEL[p.tipo];
+
+  // headline = course or course family
+  document.getElementById('profile-headline').textContent =
+    p.tipo === "órfão" ? "Perfil sem encaixe direto" :
+    p.tipo === "fronteira" ? `Entre ${p.curso_1} e ${p.curso_2}` :
+    p.tipo === "adjacente-distante" ? `${p.curso_1} (com nuance)` :
+    `Perfil ${p.curso_1}`;
+
+  // coords
+  document.getElementById('profile-coords').innerHTML =
+    `<span class="lab">FOCO</span> ${p.perfil_legivel.foco}  ·  ` +
+    `<span class="lab">ESTILO</span> ${p.perfil_legivel.estilo}  ·  ` +
+    `<span class="lab">CAMADA</span> ${p.perfil_legivel.camada}`;
+
+  // verdict
+  document.getElementById('verdict-course').textContent = p.curso_1;
+  const gap = p.gap;
+  const gapTxt = gap < 0.5 ? "muito próximo do empate" :
+                 gap < 1.0 ? "vantagem pequena" :
+                 gap < 1.5 ? "vantagem clara" : "vantagem ampla";
+  document.getElementById('verdict-second').innerHTML =
+    `Segunda opção: <strong>${p.curso_2}</strong> · ${gapTxt} (gap ${gap})`;
+
+  // interpretation
+  document.getElementById('interpretation').textContent =
+    '"' + buildInterpretation(p) + '"';
+
+  // distances
+  const distEl = document.getElementById('distances-list');
+  distEl.innerHTML = '';
+  const maxDist = Math.max(...p.all_dists.map(d => d[1]));
+  p.all_dists.forEach(([name, d], i) => {
+    const pct = maxDist > 0 ? (d / maxDist) * 100 : 0;
+    const cls = i === 0 ? 'closest' : (i === 1 ? 'second' : 'other');
+    const row = document.createElement('div');
+    row.className = 'dist-row';
+    row.innerHTML = `
+      <div class="dist-name">${name}</div>
+      <div class="dist-bar-track"><div class="dist-bar-fill ${cls}" style="width:${pct}%"></div></div>
+      <div class="dist-value">${d.toFixed(1)}</div>
+    `;
+    distEl.appendChild(row);
+  });
+
+  // feedback preview
+  const fb = buildFeedback(p);
+  document.getElementById('feedback-preview').innerHTML =
+    `<span class="lab">${fb.lab}</span>${fb.body}`;
+}
+
+// ============================================================
+// Grid + filters
+// ============================================================
+const FILTERS = [
+  { key: 'all',                 label: 'Todos',     count: 36 },
+  { key: 'âncora-adjacente',    label: 'Âncoras' },
+  { key: 'fronteira',           label: 'Fronteiras' },
+  { key: 'adjacente-distante',  label: 'Distantes' },
+  { key: 'órfão',               label: 'Órfãos' },
+  { key: 'curso:ADM Tech',      label: 'ADM Tech' },
+  { key: 'curso:SI',            label: 'SI' },
+  { key: 'curso:ES',            label: 'Eng. Software' },
+  { key: 'curso:EC',            label: 'Eng. Computação' },
+  { key: 'curso:CC',            label: 'Ciência Comp.' },
+];
+
+let activeFilter = 'all';
+
+function countFor(key) {
+  if (key === 'all') return PERFIS.length;
+  if (key.startsWith('curso:')) {
+    const c = key.split(':')[1];
+    return PERFIS.filter(p => p.curso_1 === c).length;
+  }
+  return PERFIS.filter(p => p.tipo === key).length;
+}
+
+function buildFilters() {
+  const el = document.getElementById('filters');
+  el.innerHTML = '';
+  FILTERS.forEach(f => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn' + (activeFilter === f.key ? ' active' : '');
+    btn.innerHTML = `${f.label} <span class="count">${countFor(f.key)}</span>`;
+    btn.addEventListener('click', () => {
+      activeFilter = f.key;
+      buildFilters();
+      renderGrid();
+    });
+    el.appendChild(btn);
+  });
+}
+
+function passesFilter(p) {
+  if (activeFilter === 'all') return true;
+  if (activeFilter.startsWith('curso:')) return p.curso_1 === activeFilter.split(':')[1];
+  return p.tipo === activeFilter;
+}
+
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  PERFIS.filter(passesFilter).forEach(p => {
+    const cls = TYPE_TO_CLASS[p.tipo];
+    const isSelected =
+      p.perfil.foco === state.foco &&
+      p.perfil.estilo === state.estilo &&
+      p.perfil.camada === state.camada;
+    const card = document.createElement('button');
+    card.className = `card is-${cls}${isSelected ? ' selected' : ''}`;
+    card.innerHTML = `
+      <div class="card-tag">${p.tipo.replace('â','â')}</div>
+      <div class="card-course">${p.curso_1}</div>
+      <div class="card-coords">
+        ${p.perfil_legivel.foco}<br>
+        ${p.perfil_legivel.estilo}<br>
+        ${p.perfil_legivel.camada}
+      </div>
+      <div class="card-second">2º: ${p.curso_2} · gap ${p.gap}</div>
+    `;
+    card.addEventListener('click', () => {
+      state.foco = p.perfil.foco;
+      state.estilo = p.perfil.estilo;
+      state.camada = p.perfil.camada;
+      buildSelectors();
+      renderExplorer();
+      renderGrid();
+      // scroll to explorer
+      document.querySelector('.explorer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    grid.appendChild(card);
+  });
+}
+
+// ============================================================
+// Boot
+// ============================================================
+buildSelectors();
+renderExplorer();
+buildFilters();
+renderGrid();
+</script>
+</body>
+</html>
