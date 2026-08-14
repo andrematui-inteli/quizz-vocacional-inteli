@@ -136,7 +136,7 @@ function renderResultado() {
   renderHeader();
   const r = flow.resultado;
   const interpretacao = buildInterpretacao(flow.estado.foco, estiloAtual(flow.estado), flow.estado.camada);
-  const devolutiva = buildDevolutiva(r.tipo, r.curso1, r.curso2, r.gap);
+  const devolutiva = buildDevolutiva(r.tipo, r.curso1, r.curso2, r.gap, !!flow.adaptativaAtual);
   const maxDist = Math.max(...r.dists.map((d) => d.dist));
 
   const card = document.createElement("div");

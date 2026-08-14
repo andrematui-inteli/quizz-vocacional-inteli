@@ -317,7 +317,33 @@ Os limiares da seção 2.6 foram calibrados para o espaço discreto e ficaram la
 
 Quando uma adaptativa dispara, a classificação é recalculada do zero depois dela. A planilha guarda apenas o valor **final**. A classificação que *disparou* a adaptativa não é registrada — então uma linha com `tipo_classificacao = "âncora-adjacente"` e uma chave `adapt*` presente significa "era fronteira e a pergunta extra resolveu". Isso é sinal de que a adaptativa funcionou, e vale ser contabilizado.
 
-### 8.6 Três pares de fronteira não têm pergunta adaptativa (e a devolutiva mente)
+### 8.6 "Fronteira" no dado final significa sempre que o empate NÃO foi resolvido
+
+Fato central para interpretar a coluna 7: a classificação é recalculada **depois** da adaptativa. Logo, `tipo_classificacao = "fronteira"` numa linha significa, por construção, que o empate **persistiu** — independentemente de a pergunta extra ter sido feita ou não. Se a adaptativa tivesse resolvido, o tipo teria virado outro (`âncora-adjacente`, etc.).
+
+Distinga os dois subcasos pela presença de chave `adapt*` em `respostas_raw_json`:
+
+| `tipo_classificacao` | Chave `adapt*` | Significado |
+|---|---|---|
+| `fronteira` | ausente | Empate num par **sem adaptativa disponível**. Nenhum desempate foi tentado. |
+| `fronteira` | presente | Adaptativa foi feita e **não bastou** para desempatar. |
+| outro | presente | Era fronteira e a adaptativa **resolveu**. Sinal de que ela funcionou. |
+
+> **Correção aplicada.** Até a versão anterior, a devolutiva de fronteira afirmava *"A pergunta extra que você respondeu ajudou a desempatar"* em **todos** esses casos — falso quando nenhuma pergunta foi feita, e enganoso quando foi feita mas não resolveu. Foi corrigido nas duas versões (principal e piloto): o texto agora nunca afirma desempate, e só menciona a pergunta extra quando ela de fato ocorreu. Nenhuma linha de aluno foi coletada antes da correção.
+
+### 8.6.1 As adaptativas resolvem menos da metade dos empates
+
+Enumerando os 1536 casos de fronteira com adaptativa disponível × 4 respostas possíveis = **6144 cenários**:
+
+| Desfecho | Cenários | % |
+|---|---|---|
+| Saiu de fronteira (desempatou) | 2702 | **44.0%** |
+| Continuou em fronteira | 3442 | **56.0%** |
+| …destes, terminou empatado num **par diferente** do que a adaptativa endereçava | 682 | 19.8% dos que persistiram |
+
+Os pesos das adaptativas (0.4 a 0.7) são pequenos frente ao limiar de fronteira (`gap < 0.8`), então frequentemente não movem o perfil o suficiente. Candidatos a recalibração: **aumentar o peso das adaptativas** ou **estreitar o limiar de gap**. Os 682 casos que migram de par sugerem ainda que uma única pergunta de desempate pode ser insuficiente por desenho.
+
+### 8.6.2 Três pares de fronteira não têm pergunta adaptativa
 
 Só 4 pares têm adaptativa: ADM Tech↔SI (`adaptA`), ES↔EC (`adaptB`), EC↔CC (`adaptC`), SI↔ES (`adaptD`). Mas a enumeração exaustiva mostra que a fronteira ocorre em **7** pares distintos:
 
@@ -331,9 +357,7 @@ Só 4 pares têm adaptativa: ADM Tech↔SI (`adaptA`), ES↔EC (`adaptB`), EC↔
 | **ADM Tech / ES** | **0.9%** | **nenhuma** |
 | **EC / SI** | **0.4%** | **nenhuma** |
 
-**228 das 4096 combinações (5.6%, ou 13% de todas as fronteiras)** caem em fronteira sem adaptativa disponível. Nesses casos o código mantém `tipo_classificacao = "fronteira"` e exibe a devolutiva de fronteira, cujo texto afirma: *"A pergunta extra que você respondeu ajudou a desempatar"* — **mas nenhuma pergunta extra foi feita**. É um defeito real, herdado da versão principal.
-
-Como identificar essas linhas: `tipo_classificacao = "fronteira"` **e** `respostas_raw_json` **sem** nenhuma chave `adapt*`. São linhas em que o desempate nunca aconteceu, e o aluno leu um texto factualmente incorreto — considere isso ao interpretar o `fb_comparacao` delas.
+**228 das 4096 combinações (5.6%, ou 13% de todas as fronteiras)** caem em fronteira sem adaptativa disponível — sobretudo o par **CC / ES** (4.3% de todas as combinações). Nesses casos nenhum desempate é tentado. É uma lacuna de cobertura do modelo, não um defeito de código: criar as adaptativas faltantes é trabalho de conteúdo pedagógico, e o par CC↔ES é o candidato prioritário.
 
 ### 8.7 Divergências entre este documento e o contexto completo
 

@@ -156,7 +156,13 @@ function buildInterpretacao(foco, estilo, camada) {
   return `Você é alguém ${focoFrag}, ${estiloFrag}, ${camadaFrag}.`;
 }
 
-function buildDevolutiva(tipo, curso1, curso2, gap) {
+// houveAdaptativa: se uma pergunta adaptativa foi de fato respondida neste fluxo.
+// Importante para o caso "fronteira": como a classificação é recalculada depois da
+// adaptativa, um tipo final "fronteira" significa que o empate NÃO foi resolvido —
+// seja porque não existe adaptativa para aquele par, seja porque ela não moveu o
+// perfil o suficiente. Em nenhum dos dois casos o texto pode afirmar que houve
+// desempate.
+function buildDevolutiva(tipo, curso1, curso2, gap, houveAdaptativa) {
   const c1 = NOME_CURSO[curso1];
   const c2 = NOME_CURSO[curso2];
 
@@ -164,7 +170,9 @@ function buildDevolutiva(tipo, curso1, curso2, gap) {
     return `Esse perfil aponta com clareza para <strong>${c1}</strong>. ${c2} aparece como segunda opção compatível, com nuance distinta — vale conhecer as fronteiras entre os dois.`;
   }
   if (tipo === "fronteira") {
-    return `Seu perfil ficou quase empatado entre <strong>${c1}</strong> e <strong>${c2}</strong>. A pergunta extra que você respondeu ajudou a desempatar, mas vale a pena conhecer os dois cursos de perto.`;
+    return houveAdaptativa
+      ? `Seu perfil ficou quase empatado entre <strong>${c1}</strong> e <strong>${c2}</strong>. Mesmo com a pergunta extra, os dois seguem muito próximos — vale conhecer cada um de perto antes de decidir.`
+      : `Seu perfil ficou quase empatado entre <strong>${c1}</strong> e <strong>${c2}</strong>. Vale a pena conhecer os dois cursos de perto antes de decidir.`;
   }
   if (tipo === "adjacente-distante") {
     return `O curso mais próximo do seu perfil é <strong>${c1}</strong>, mas seu perfil tem uma tensão interessante — você não está bem no centro do curso. Isso pode virar um diferencial dentro dele.`;
