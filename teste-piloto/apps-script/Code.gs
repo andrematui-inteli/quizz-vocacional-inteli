@@ -11,14 +11,19 @@ const CABECALHO = [
   "nome",
   "curso_real",
   "curso_real_outro",
-  "curso_previsto_1",
-  "curso_previsto_2",
+  "curso_indicado",
+  "curso_indicado_2",
   "tipo_classificacao",
   "gap",
   "acertou",
-  "feedback_precisao",
-  "feedback_relevancia",
-  "feedback_comentario",
+  "rank_curso_real",
+  "dist_perfil_curso_indicado",
+  "dist_perfil_curso_real",
+  "delta_erro_modelo",
+  "dist_entre_ancoras",
+  "fb_comparacao",
+  "fb_perguntas",
+  "fb_comentario",
   "foco",
   "camada",
   "estilo_integrador",
@@ -31,23 +36,33 @@ function doPost(e) {
   const sheet = getSheet();
   const data = JSON.parse(e.postData.contents);
 
+  const res = data.resultado || {};
+  const an = data.analiseSugestaoVsRealidade || {};
+  const fb = data.feedback || {};
+  const est = data.estadoFinal || {};
+
   const linha = [
     data.timestamp || new Date().toISOString(),
     data.nome || "",
     data.cursoReal || "",
     data.cursoRealOutro || "",
-    (data.resultado && data.resultado.curso1) || "",
-    (data.resultado && data.resultado.curso2) || "",
-    (data.resultado && data.resultado.tipo) || "",
-    (data.resultado && data.resultado.gap) ?? "",
-    !!data.acertou,
-    (data.feedback && data.feedback.precisao) ?? "",
-    (data.feedback && data.feedback.relevancia) ?? "",
-    (data.feedback && data.feedback.comentario) || "",
-    (data.estadoFinal && data.estadoFinal.foco) ?? "",
-    (data.estadoFinal && data.estadoFinal.camada) ?? "",
-    (data.estadoFinal && data.estadoFinal.estiloIntegrador) ?? "",
-    (data.estadoFinal && data.estadoFinal.estiloConstrutor) ?? "",
+    res.curso1 || "",
+    res.curso2 || "",
+    res.tipo || "",
+    valorOuVazio(res.gap),
+    data.acertou === null || data.acertou === undefined ? "" : !!data.acertou,
+    valorOuVazio(an.rankCursoReal),
+    valorOuVazio(an.distPerfilIndicado),
+    valorOuVazio(an.distPerfilReal),
+    valorOuVazio(an.delta),
+    valorOuVazio(an.distEntreAncoras),
+    fb.comparacao || "",
+    fb.perguntas || "",
+    fb.comentario || "",
+    valorOuVazio(est.foco),
+    valorOuVazio(est.camada),
+    valorOuVazio(est.estiloIntegrador),
+    valorOuVazio(est.estiloConstrutor),
     JSON.stringify(data.respostas || {}),
     JSON.stringify(data.distancias || []),
   ];
@@ -57,6 +72,11 @@ function doPost(e) {
   return ContentService
     .createTextOutput(JSON.stringify({ ok: true }))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+// Preserva o zero (que é um valor legítimo de distância) e vira "" só em null/undefined.
+function valorOuVazio(v) {
+  return v === null || v === undefined ? "" : v;
 }
 
 function getSheet() {

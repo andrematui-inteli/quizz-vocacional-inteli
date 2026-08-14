@@ -1,7 +1,7 @@
 /* ============================================================
    Quiz Vocacional Inteli — PILOTO DE TESTE
    Fluxo: intro → dados pessoais → núcleo → adaptativa condicional
-          → resultado → feedback estruturado → envio
+          → resultado + feedback (mesma página) → envio
    ============================================================ */
 
 const app = document.getElementById("app");
@@ -9,7 +9,7 @@ const app = document.getElementById("app");
 const CURSOS_OPCOES = ["ADM Tech", "SI", "ES", "EC", "CC"];
 
 const flow = {
-  etapa: "intro", // intro | dados | perguntas | resultado | feedback | enviado | erro
+  etapa: "intro", // intro | dados | perguntas | resultado | enviado
   estado: novoEstado(),
   nome: "",
   cursoReal: "",
@@ -18,7 +18,7 @@ const flow = {
   indice: 0,
   adaptativaAtual: null,
   resultado: null,
-  feedback: { precisao: null, relevancia: null, comentario: "" },
+  feedback: { comparacao: "", perguntas: "", comentario: "" },
 };
 
 function totalPerguntasEstimado() {
@@ -43,8 +43,6 @@ function render() {
       break;
     case "resultado":
       renderResultado();
-      break;
-    case "feedback":
       renderFeedback();
       break;
     case "enviado":
@@ -247,8 +245,6 @@ function renderResultado() {
       <h4>Como você se compara aos 5 cursos</h4>
       <div id="distances-list"></div>
     </div>
-
-    <button class="btn-primary" id="feedback-btn">Continuar para o feedback</button>
   `;
   app.appendChild(card);
 
@@ -256,60 +252,132 @@ function renderResultado() {
   r.dists.forEach((d, i) => {
     const pct = maxDist > 0 ? (d.dist / maxDist) * 100 : 0;
     const cls = i === 0 ? "closest" : i === 1 ? "second" : "other";
+    const isReal = d.curso === flow.cursoReal;
     const row = document.createElement("div");
-    row.className = "dist-row";
+    row.className = "dist-row" + (isReal ? " is-real" : "");
     row.innerHTML = `
-      <div class="dist-name">${NOME_CURSO[d.curso]}</div>
+      <div class="dist-name">${NOME_CURSO[d.curso]}${isReal ? '<span class="badge-seu">seu curso</span>' : ""}</div>
       <div class="dist-bar-track"><div class="dist-bar-fill ${cls}" style="width:${pct}%"></div></div>
       <div class="dist-value">${d.dist.toFixed(1)}</div>
     `;
     distEl.appendChild(row);
   });
-
-  document.getElementById("feedback-btn").addEventListener("click", () => {
-    flow.etapa = "feedback";
-    render();
-  });
 }
 
-const RATING_PRECISAO = [
-  { value: 1, label: "Nada a ver" },
-  { value: 2, label: "Pouco a ver" },
-  { value: 3, label: "Mais ou menos" },
-  { value: 4, label: "Bastante a ver" },
-  { value: 5, label: "Exatamente" },
-];
+/* ------------------------------------------------------------
+   Distância entre a sugestão do quiz e o curso real
+   ------------------------------------------------------------ */
 
-const RATING_RELEVANCIA = [
-  { value: 1, label: "Nada relevantes" },
-  { value: 2, label: "Pouco relevantes" },
-  { value: 3, label: "Mais ou menos" },
-  { value: 4, label: "Bem relevantes" },
-  { value: 5, label: "Muito relevantes" },
-];
+// Mesma métrica ponderada de calcularDistancias(), mas entre duas âncoras
+// de curso — mede se o erro foi entre vizinhos ou entre extremos do espaço.
+function distanciaEntreAncoras(cursoA, cursoB) {
+  const a = ANCORAS[cursoA];
+  const b = ANCORAS[cursoB];
+  if (!a || !b) return null;
+  return (
+    Math.abs(a.foco - b.foco) * PESO_FOCO +
+    (a.estilo === b.estilo ? 0 : 1) * PESO_ESTILO +
+    Math.abs(a.camada - b.camada) * PESO_CAMADA
+  );
+}
+
+function analisarSugestaoVsRealidade() {
+  const r = flow.resultado;
+  if (!ANCORAS[flow.cursoReal]) return null; // curso "Outro": sem âncora no modelo
+
+  const idx = r.dists.findIndex((d) => d.curso === flow.cursoReal);
+  const real = r.dists[idx];
+
+  return {
+    cursoIndicado: r.curso1,
+    cursoReal: flow.cursoReal,
+    acertou: r.curso1 === flow.cursoReal,
+    rankCursoReal: idx + 1,
+    totalCursos: r.dists.length,
+    distPerfilIndicado: r.dist1,
+    distPerfilReal: real.dist,
+    delta: real.dist - r.dist1,
+    distEntreAncoras: distanciaEntreAncoras(r.curso1, flow.cursoReal),
+  };
+}
+
+function renderBlocoComparacao(a) {
+  if (!a) {
+    return `
+      <div class="compare-block">
+        <div class="compare-head">
+          <span class="compare-title">Sugestão × realidade</span>
+        </div>
+        <p class="compare-note">Você indicou um curso fora dos 5 mapeados pelo modelo, então não é possível
+        calcular a distância vetorial nesse caso. Suas respostas abaixo seguem sendo muito úteis.</p>
+      </div>
+    `;
+  }
+
+  const metricas = a.acertou
+    ? [["Posição do seu curso no seu perfil", `${a.rankCursoReal}º de ${a.totalCursos}`],
+       ["Distância do seu perfil até ele", a.distPerfilReal.toFixed(1)]]
+    : [["Posição do seu curso no seu perfil", `${a.rankCursoReal}º de ${a.totalCursos}`],
+       ["Perfil → curso indicado", a.distPerfilIndicado.toFixed(1)],
+       ["Perfil → seu curso real", a.distPerfilReal.toFixed(1)],
+       ["Delta (o quanto o modelo errou)", a.delta.toFixed(1)],
+       ["Distância entre os dois cursos", a.distEntreAncoras.toFixed(1)]];
+
+  return `
+    <div class="compare-block">
+      <div class="compare-head">
+        <span class="compare-title">Sugestão × realidade</span>
+        <span class="compare-badge ${a.acertou ? "hit" : "miss"}">${a.acertou ? "bateu" : "não bateu"}</span>
+      </div>
+
+      <div class="compare-courses">
+        <div class="compare-course">
+          <div class="compare-course-label">Quiz indicou</div>
+          <div class="compare-course-name">${NOME_CURSO[a.cursoIndicado]}</div>
+        </div>
+        <div class="compare-arrow">${a.acertou ? "=" : "≠"}</div>
+        <div class="compare-course">
+          <div class="compare-course-label">Você faz</div>
+          <div class="compare-course-name">${NOME_CURSO[a.cursoReal]}</div>
+        </div>
+      </div>
+
+      <div class="compare-metrics">
+        ${metricas.map(([label, valor]) => `
+          <div class="compare-metric">
+            <span class="compare-metric-label">${label}</span>
+            <span class="compare-metric-value">${valor}</span>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+}
 
 function renderFeedback() {
-  renderHeader();
-  const r = flow.resultado;
+  const analise = analisarSugestaoVsRealidade();
 
   const card = document.createElement("div");
   card.className = "card feedback";
   card.innerHTML = `
-    <div class="question-text">Rapidinho, seu feedback nos ajuda a calibrar o quiz</div>
+    <div class="question-text">Seu feedback</div>
+    <p class="lead">O resultado acima fica na tela — pode reler quantas vezes quiser enquanto responde.</p>
+
+    ${renderBlocoComparacao(analise)}
 
     <div class="field">
-      <label>O curso indicado (<strong>${NOME_CURSO[r.curso1]}</strong>) tem a ver com o curso que você realmente faz (<strong>${flow.cursoReal === "Outro" ? flow.cursoRealOutro : NOME_CURSO[flow.cursoReal]}</strong>)?</label>
-      <div class="rating-row" id="rating-precisao"></div>
+      <label for="fb-comparacao">O que achou da sugestão de curso do quiz comparado com o curso que você está fazendo de fato? Em quais pontos o resultado (pensando no texto todo apresentado ao final) acertou ou errou?</label>
+      <textarea id="fb-comparacao" rows="5" placeholder="Escreva com suas palavras...">${escapeHtml(flow.feedback.comparacao)}</textarea>
     </div>
 
     <div class="field">
-      <label>As perguntas do quiz foram relevantes para pensar sobre isso?</label>
-      <div class="rating-row" id="rating-relevancia"></div>
+      <label for="fb-perguntas">O que você achou das perguntas? Elas te instigaram a pensar sobre si mesmo(a) e/ou abordaram tópicos que você acha relevante para a decisão de qual curso fazer?</label>
+      <textarea id="fb-perguntas" rows="5" placeholder="Escreva com suas palavras...">${escapeHtml(flow.feedback.perguntas)}</textarea>
     </div>
 
     <div class="field">
-      <label for="input-comentario">Algum comentário livre? (opcional)</label>
-      <textarea id="input-comentario" rows="3" placeholder="Alguma pergunta confusa, algo que faltou, algo que achou estranho...">${flow.feedback.comentario}</textarea>
+      <label for="fb-comentario">Comentários livres <span class="label-opt">(opcional)</span></label>
+      <textarea id="fb-comentario" rows="3" placeholder="Qualquer outra coisa que queira registrar...">${escapeHtml(flow.feedback.comentario)}</textarea>
     </div>
 
     <div class="field-error" id="feedback-erro"></div>
@@ -317,47 +385,28 @@ function renderFeedback() {
   `;
   app.appendChild(card);
 
-  montarRating(card.querySelector("#rating-precisao"), RATING_PRECISAO, flow.feedback.precisao, (v) => {
-    flow.feedback.precisao = v;
-  });
-  montarRating(card.querySelector("#rating-relevancia"), RATING_RELEVANCIA, flow.feedback.relevancia, (v) => {
-    flow.feedback.relevancia = v;
-  });
-
   card.querySelector("#feedback-enviar").addEventListener("click", async () => {
-    flow.feedback.comentario = card.querySelector("#input-comentario").value.trim();
     const erroEl = card.querySelector("#feedback-erro");
+    flow.feedback.comparacao = card.querySelector("#fb-comparacao").value.trim();
+    flow.feedback.perguntas = card.querySelector("#fb-perguntas").value.trim();
+    flow.feedback.comentario = card.querySelector("#fb-comentario").value.trim();
 
-    if (!flow.feedback.precisao || !flow.feedback.relevancia) {
-      erroEl.textContent = "Preencha as duas avaliações para continuar.";
+    if (!flow.feedback.comparacao || !flow.feedback.perguntas) {
+      erroEl.textContent = "Responda as duas primeiras perguntas para enviar (a terceira é opcional).";
       return;
     }
 
     const btn = card.querySelector("#feedback-enviar");
     btn.disabled = true;
     btn.textContent = "Enviando...";
-    await enviarResultado();
+    erroEl.textContent = "";
+    await enviarResultado(analise);
     flow.etapa = "enviado";
     render();
   });
 }
 
-function montarRating(container, opcoes, valorAtual, onChange) {
-  opcoes.forEach((opt) => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "rating-btn" + (valorAtual === opt.value ? " selected" : "");
-    btn.innerHTML = `<span class="rating-num">${opt.value}</span><span class="rating-label">${opt.label}</span>`;
-    btn.addEventListener("click", () => {
-      onChange(opt.value);
-      container.querySelectorAll(".rating-btn").forEach((b) => b.classList.remove("selected"));
-      btn.classList.add("selected");
-    });
-    container.appendChild(btn);
-  });
-}
-
-function montarPayload() {
+function montarPayload(analise) {
   const r = flow.resultado;
   return {
     timestamp: new Date().toISOString(),
@@ -372,7 +421,8 @@ function montarPayload() {
       dist2: r.dist2,
       gap: r.gap,
     },
-    acertou: flow.cursoReal === r.curso1,
+    acertou: analise ? analise.acertou : null,
+    analiseSugestaoVsRealidade: analise,
     estadoFinal: {
       foco: flow.estado.foco,
       camada: flow.estado.camada,
@@ -385,8 +435,8 @@ function montarPayload() {
   };
 }
 
-async function enviarResultado() {
-  const payload = montarPayload();
+async function enviarResultado(analise) {
+  const payload = montarPayload(analise);
 
   if (!CONFIG.GAS_URL) {
     baixarBackupLocal(payload);
@@ -421,8 +471,8 @@ function renderEnviado() {
   const card = document.createElement("div");
   card.className = "card enviado";
   card.innerHTML = `
-    <p class="lead">Obrigado, ${flow.nome.split(" ")[0]}! Sua resposta foi registrada.</p>
-    <p class="lead">${CONFIG.GAS_URL ? "" : "Como o envio automático ainda não está configurado, um arquivo com sua resposta foi baixado — por favor envie esse arquivo para quem está coordenando o teste."}</p>
+    <p class="lead">Obrigado, ${escapeHtml(flow.nome.split(" ")[0])}! Sua resposta foi registrada.</p>
+    ${CONFIG.GAS_URL ? "" : '<p class="lead">Como o envio automático ainda não está configurado, um arquivo com sua resposta foi baixado — por favor envie esse arquivo para quem está coordenando o teste.</p>'}
     <button class="btn-secondary" id="restart-btn">Responder novamente</button>
   `;
   app.appendChild(card);
@@ -435,7 +485,7 @@ function renderEnviado() {
     flow.indice = 0;
     flow.adaptativaAtual = null;
     flow.resultado = null;
-    flow.feedback = { precisao: null, relevancia: null, comentario: "" };
+    flow.feedback = { comparacao: "", perguntas: "", comentario: "" };
     flow.etapa = "intro";
     render();
   });
@@ -453,7 +503,11 @@ function slug(tipo) {
 }
 
 function escapeAttr(str) {
-  return String(str).replace(/"/g, "&quot;");
+  return String(str).replace(/&/g, "&amp;").replace(/"/g, "&quot;");
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 render();
