@@ -351,10 +351,6 @@ h1 em {
 .card.feedback {
   margin-top: 20px;
 }
-.card.feedback .lead {
-  font-size: 13px;
-  margin-bottom: 24px;
-}
 
 /* Destaque do curso real na lista de distâncias do resultado */
 .badge-seu {

@@ -361,7 +361,6 @@ function renderFeedback() {
   card.className = "card feedback";
   card.innerHTML = `
     <div class="question-text">Seu feedback</div>
-    <p class="lead">O resultado acima fica na tela — pode reler quantas vezes quiser enquanto responde.</p>
 
     ${renderBlocoComparacao(analise)}
 
