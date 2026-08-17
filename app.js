@@ -137,7 +137,6 @@ function renderResultado() {
   const r = flow.resultado;
   const interpretacao = buildInterpretacao(flow.estado.foco, estiloAtual(flow.estado), flow.estado.camada);
   const devolutiva = buildDevolutiva(r.tipo, r.curso1, r.curso2, r.gap, !!flow.adaptativaAtual);
-  const maxDist = Math.max(...r.dists.map((d) => d.dist));
 
   const card = document.createElement("div");
   card.className = "card resultado";
@@ -153,7 +152,7 @@ function renderResultado() {
     <p class="devolutiva">${devolutiva}</p>
 
     <div class="distances">
-      <h4>Como você se compara aos 5 cursos</h4>
+      <h4>Sua afinidade com os 5 cursos <span class="scale-hint">0 a 5</span></h4>
       <div id="distances-list"></div>
     </div>
 
@@ -163,14 +162,15 @@ function renderResultado() {
 
   const distEl = card.querySelector("#distances-list");
   r.dists.forEach((d, i) => {
-    const pct = maxDist > 0 ? (d.dist / maxDist) * 100 : 0;
+    const af = afinidade(d.dist);
+    const pct = (af / AFINIDADE_MAX) * 100;
     const cls = i === 0 ? "closest" : i === 1 ? "second" : "other";
     const row = document.createElement("div");
     row.className = "dist-row";
     row.innerHTML = `
       <div class="dist-name">${NOME_CURSO[d.curso]}</div>
       <div class="dist-bar-track"><div class="dist-bar-fill ${cls}" style="width:${pct}%"></div></div>
-      <div class="dist-value">${d.dist.toFixed(1)}</div>
+      <div class="dist-value">${af.toFixed(1)}</div>
     `;
     distEl.appendChild(row);
   });

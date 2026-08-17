@@ -367,6 +367,32 @@ Só 4 pares têm adaptativa: ADM Tech↔SI (`adaptA`), ES↔EC (`adaptB`), EC↔
 | Estilo | 3 níveis discretos (0/1/2) | 2 acumuladores + regra hierárquica (2.2). Não há escala de 3 níveis. |
 | Espaço de perfis | 36 pontos discretos | contínuo em foco e camada |
 
+### 8.7.1 A tela mostra afinidade; a planilha grava distância
+
+Na interface, a lista dos 5 cursos é exibida como **afinidade de 0 a 5** (maior = mais compatível), porque distância era contraintuitivo para o respondente — o curso mais compatível tinha distância 0 e portanto barra de largura zero. A planilha continua gravando **distância bruta** em todas as colunas; nenhum dado mudou.
+
+A conversão é puramente de exibição:
+
+```
+afinidade = 5 × (1 − distância / 6.9)        (truncado em [0, 5])
+distância = 6.9 × (1 − afinidade / 5)
+```
+
+| Distância | Afinidade exibida |
+|---|---|
+| 0.0 | 5.0 |
+| 1.2 | 4.1 |
+| 2.3 | 3.3 |
+| 3.5 | 2.5 |
+| 4.7 | 1.6 |
+| 6.9 | 0.0 |
+
+A normalização é **absoluta** (contra o máximo teórico 6.9), não relativa ao máximo de cada respondente. Isso é intencional: um perfil `órfão` recebe cerca de 3.0 no primeiro colocado em vez de 5.0, o que mantém a coerência com a devolutiva que diz que nenhum curso atende bem.
+
+**Implicação para a análise:** se um aluno citar números em `fb_comparacao` (ex. "me deu 4.1 em SI"), ele está falando de **afinidade**, não de distância. Converta antes de cruzar com as colunas.
+
+O bloco "sugestão × realidade" da tela de feedback continua exibindo **distâncias** — é onde vivem `delta` e `dist_entre_ancoras`, que só fazem sentido como distância. A tela avisa isso explicitamente ao respondente.
+
 ### 8.8 Ressalvas de leitura dos dados
 
 - **Vírgula decimal:** a planilha está em locale pt-BR e exibe `6,9`. Ao exportar CSV, o separador decimal pode sair como vírgula — converta antes de fazer conta.

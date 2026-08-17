@@ -218,6 +218,21 @@ function estiloAtual(estado) {
   return estado.estiloConstrutor <= 0 ? "Construtor" : "Investigador";
 }
 
+// Distância máxima possível entre um perfil e a âncora de um curso: acontece entre
+// os dois extremos opostos do espaço (perfil sobre CC vs. ADM Tech, e vice-versa).
+const DIST_MAX = 2 * PESO_FOCO + PESO_ESTILO + 3 * PESO_CAMADA; // 6.9
+
+const AFINIDADE_MAX = 5;
+
+// Converte distância (menor = mais compatível) em afinidade 0–5 (maior = mais
+// compatível), só para exibição — os dados continuam sendo gravados em distância.
+// A escala é absoluta, contra DIST_MAX, e não relativa ao máximo do respondente:
+// assim um perfil distante de todos os cursos não recebe nota alta no primeiro
+// colocado só por ele ser o menos distante, o que contradiria a devolutiva.
+function afinidade(dist) {
+  return clamp(AFINIDADE_MAX * (1 - dist / DIST_MAX), 0, AFINIDADE_MAX);
+}
+
 function calcularDistancias(estado) {
   const estilo = estiloAtual(estado);
   const dists = Object.entries(ANCORAS).map(([curso, ancora]) => {

@@ -273,6 +273,12 @@ h1 em {
   text-transform: uppercase;
   font-weight: 500;
 }
+.scale-hint {
+  color: var(--ink-soft);
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: none;
+}
 .dist-row {
   display: grid;
   grid-template-columns: 150px 1fr 36px;
@@ -438,6 +444,14 @@ h1 em {
   font-size: 18px;
   color: var(--line-strong);
 }
+
+.compare-scale-note {
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  margin-bottom: 10px;
+}
+.compare-scale-note strong { color: var(--ink); }
 
 .compare-metric {
   display: flex;
