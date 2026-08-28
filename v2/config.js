@@ -10,5 +10,5 @@
    ============================================================ */
 
 const CONFIG = {
-  GAS_URL: "",
+  GAS_URL: "https://script.google.com/macros/s/AKfycbyHu-7qD5zxgJtmzBKvDBkjWaO_sVt5UBoCcv878kdpmyikB70ZEj_HzWfi5tZFJb7UmA/exec",
 };
