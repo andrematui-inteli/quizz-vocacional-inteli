@@ -61,9 +61,9 @@ const NOME_CURSO = {
 const NUCLEO = [
   {
     id: "C1", eixo: "camada", peso: 1.0,
-    texto: "Um aplicativo que você usa todos os dias começou a travar. Se desse para você resolver, o que você ia querer fazer?",
-    poloA: "Entender o que mais está atrapalhando quem usa, para decidir o que arrumar primeiro.",
-    poloB: "Ir atrás do que está acontecendo por dentro do aplicativo para ele travar.",
+    texto: "Um aplicativo que você usa todos os dias começou a travar. Se desse para você ajudar, o que você iria preferir fazer?",
+    poloA: "Entender o que mais está atrapalhando os usuários, para decidir o que arrumar primeiro.",
+    poloB: "Descobrir onde estão os problemas que estão fazendo o app travar.",
   },
   {
     id: "A1", eixo: "amplitude", peso: 1.0,
@@ -92,8 +92,8 @@ const NUCLEO = [
   {
     id: "A2", eixo: "amplitude", peso: 1.0,
     texto: "No fim de um ano, você preferiria poder dizer:",
-    poloA: "Estudei muitos assuntos diferentes e sei como eles se conectam.",
-    poloB: "Fiquei muito bom em uma coisa específica e difícil.",
+    poloA: "Estudei muitos assuntos diferentes.",
+    poloB: "Fiquei muito bom em uma coisa difícil.",
   },
   {
     id: "C3", eixo: "camada", peso: 0.8,
@@ -105,7 +105,7 @@ const NUCLEO = [
     id: "M3", eixo: "modo", peso: 0.8,
     texto: "Num trabalho em grupo que travou, o que você costuma fazer?",
     poloA: "Começar a produzir a próxima parte, para o grupo voltar a andar.",
-    poloB: "Organizar o que falta e definir com o grupo qual caminho seguir.",
+    poloB: "Organizar o que falta ser feito e definir com o grupo qual caminho seguir.",
   },
 ];
 
