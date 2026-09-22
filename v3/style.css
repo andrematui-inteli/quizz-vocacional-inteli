@@ -174,6 +174,7 @@ h1 em {
   background: white;
   transition: all 0.12s ease;
 }
+.scale-dot.mag-0 { width: 17px; height: 17px; border-style: dashed; }
 .scale-dot.mag-1 { width: 20px; height: 20px; }
 .scale-dot.mag-2 { width: 31px; height: 31px; }
 .scale-dot.mag-3 { width: 42px; height: 42px; }
@@ -504,6 +505,7 @@ h1 em {
   .scale { gap: 0; }
   .scale-btn { padding: 4px 1px 2px; }
   .scale-dot-wrap { height: 38px; margin-bottom: 8px; }
+  .scale-dot.mag-0 { width: 14px; height: 14px; border-style: dashed; }
   .scale-dot.mag-1 { width: 16px; height: 16px; }
   .scale-dot.mag-2 { width: 25px; height: 25px; }
   .scale-dot.mag-3 { width: 34px; height: 34px; }

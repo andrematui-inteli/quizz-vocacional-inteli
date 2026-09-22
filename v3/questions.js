@@ -15,23 +15,28 @@
 
    Revisão de formato (ver DocumentosRef/Inteli_Quiz_v2_Diagnostico_e_Revisao_Perguntas.md):
    - Perguntas deixaram de ser dilema A/B e viraram afirmação única, respondida
-     em escala de concordância de 6 níveis (sem ponto neutro). O dilema A/B
-     escondia mal a lógica de "duas opções" e limitava a escala a 4 pontos;
-     a afirmação única com 6 níveis dá mais nuance sem reintroduzir uma opção
-     neutra (que gera efeito de tendência central).
+     em escala de concordância de 7 níveis (com ponto neutro, adicionado por
+     pedido explícito — ver decisão registrada no documento acima. Ausência de
+     neutro era escolha deliberada desde a v1 para evitar efeito de tendência
+     central; o trade-off foi aceito conscientemente).
    - Três afirmações (C1, C2, M3) foram reformuladas no mesmo processo para
      corrigir vazamento de eixo identificado no diagnóstico: C1 não alcançava
      o polo de hardware/fundamentos, C2 confundia curiosidade abstrata com
      profundidade técnica real, e M3 media liderança/coordenação (traço
      compartilhado por todo aluno do Inteli via PBL) em vez de investigação.
+   - Redação das 8 afirmações revisada de novo para remover contraste textual
+     embutido ("a só X" / "mais do que só X"), que enviesava qualquer
+     respondente a concordar (viés de aquiescência) independente da disposição
+     real — achado do feedback qualitativo de alunos de CC/ES/EC na v3.
    ============================================================ */
 
-// Escala de concordância: sem opção neutra (evita efeito de tendência central),
-// sinal indica o polo do eixo e módulo a intensidade da concordância.
+// Escala de concordância com ponto neutro no centro: sinal indica o polo do
+// eixo e módulo a intensidade da concordância; 0 não move o eixo.
 const SCALE = [
   { label: "Discordo totalmente", value: -3 },
   { label: "Discordo", value: -2 },
   { label: "Discordo parcialmente", value: -1 },
+  { label: "Neutro", value: 0 },
   { label: "Concordo parcialmente", value: 1 },
   { label: "Concordo", value: 2 },
   { label: "Concordo totalmente", value: 3 },
@@ -78,39 +83,47 @@ const NOME_CURSO = {
    "alto" (mesmo sentido que o antigo poloB): camada 3 = hardware/fundamentos,
    amplitude 2 = especialista, modo 2 = investigador. Discordar move para o
    polo "baixo" (antigo poloA).
+
+   Redação sem contraste embutido (ver DocumentosRef/Inteli_Quiz_v2_Diagnostico_e_Revisao_Perguntas.md):
+   a primeira leva de afirmações usava construções tipo "a só X" / "mais do
+   que só X", que rotulavam o polo baixo como insuficiente e enviesavam
+   qualquer respondente a concordar (viés de aquiescência), independente da
+   disposição real — visível no padrão de Modo alto em quase todo mundo
+   testado, mesmo gente de cursos diferentes. Cada afirmação agora descreve
+   um único comportamento, sem comparação textual ao polo oposto.
    ------------------------------------------------------------ */
 const NUCLEO = [
   {
     id: "C1", eixo: "camada", peso: 1.0,
-    texto: "Quando um app que uso trava, prefiro investigar a causa técnica raiz — no código, no hardware ou na conexão — a só identificar o que está incomodando quem usa.",
+    texto: "Quando o sistema que estou desenvolvendo trava, meu interesse natural é investigar a causa técnica raiz: seja no código, no hardware ou na conexão.",
   },
   {
     id: "A1", eixo: "amplitude", peso: 1.0,
-    texto: "Entre dois projetos possíveis, eu prefiro um que entra fundo em um problema só — onde eu precise dominar bem aquele assunto — a um que passa por várias áreas diferentes.",
+    texto: "Entre dois projetos possíveis, eu escolheria o que entra fundo em um problema, onde eu precisasse dominar bem aquele assunto.",
   },
   {
     id: "M1", eixo: "modo", peso: 1.0,
-    texto: "Diante de um problema difícil, meu primeiro impulso é parar para entender a causa a fundo antes de construir qualquer coisa — não colocar a mão na massa direto.",
+    texto: "Diante de um problema difícil, meu primeiro impulso é parar para entender a causa a fundo antes de começar a construir algo.",
   },
   {
     id: "C2", eixo: "camada", peso: 1.0,
-    texto: "Quando vou aprender uma ferramenta nova, quero entender como ela funciona por dentro — isso me dá controle real sobre o que estou fazendo, não só aprender o suficiente para usá-la.",
+    texto: "Quando vou aprender uma ferramenta nova, quero entender como ela funciona por dentro, indo além das funcionalidades básicas.",
   },
   {
     id: "M2", eixo: "modo", peso: 1.0,
-    texto: "No fim de um projeto, o que me deixa mais satisfeito é ter entendido por que o problema acontecia e qual era o melhor jeito de resolver — mais do que só ver a solução funcionando.",
+    texto: "No fim de um projeto, o que me deixa mais satisfeito é ter entendido por que o problema acontecia e qual era o melhor jeito de resolver.",
   },
   {
     id: "A2", eixo: "amplitude", peso: 1.0,
-    texto: "No fim de um ano, prefiro poder dizer que fiquei muito bom numa coisa difícil a dizer que estudei muitos assuntos diferentes.",
+    texto: "No fim de um ano, gostaria de poder dizer que fiquei muito bom em uma coisa difícil.",
   },
   {
     id: "C3", eixo: "camada", peso: 0.8,
-    texto: "Numa conversa sobre um projeto novo, a parte que mais me chama atenção é como ele vai ser construído tecnicamente para funcionar de verdade — mais do que quem ele vai afetar.",
+    texto: "Em uma conversa sobre um projeto novo, a parte que mais me chama atenção é como ele vai ser construído tecnicamente.",
   },
   {
     id: "M3", eixo: "modo", peso: 0.8,
-    texto: "Num trabalho em grupo que travou, meu impulso costuma ser parar a produção e investigar a causa do travamento antes de continuar — mesmo que isso atrase o grupo.",
+    texto: "Em um trabalho em grupo que travou, meu impulso costuma ser investigar a causa do travamento antes de continuar.",
   },
 ];
 
@@ -198,16 +211,16 @@ function calcularDistancias(estado) {
 
 /* ------------------------------------------------------------
    Classificação — limiares derivados da distribuição real do modelo
-   (enumeração das 6^8 = 1.679.616 combinações de resposta possíveis da
-   escala de 6 níveis), não escolhidos a olho. Re-derivados depois da
-   migração de dilema A/B (4 níveis, 65.536 combinações) para afirmação
-   única com escala de concordância (6 níveis) — ver
-   DocumentosRef/Inteli_Quiz_v2_Diagnostico_e_Revisao_Perguntas.md.
+   (enumeração das 7^8 = 5.764.801 combinações de resposta possíveis da
+   escala de 7 níveis, com neutro), não escolhidos a olho. Re-derivados
+   depois de: dilema A/B (4 níveis, 65.536 combinações) → afirmação única
+   sem neutro (6 níveis, 1.679.616) → afirmação única com neutro (7 níveis,
+   atual) — ver DocumentosRef/Inteli_Quiz_v2_Diagnostico_e_Revisao_Perguntas.md.
    ------------------------------------------------------------ */
 const LIMIAR = {
-  gapFronteira: 0.095, // percentil 12 dos gaps  → ~12% em fronteira
-  d1Ancora: 1.165,     // percentil 50 das distâncias ao curso mais próximo
-  d1Orfao: 1.590,      // percentil 90  → ~10% de órfãos
+  gapFronteira: 0.091, // percentil 12 dos gaps  → ~12% em fronteira
+  d1Ancora: 1.169,     // percentil 50 das distâncias ao curso mais próximo
+  d1Orfao: 1.567,      // percentil 90  → ~10% de órfãos
 };
 
 function classificar(dists) {
