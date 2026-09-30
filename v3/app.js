@@ -1,8 +1,8 @@
 /* ============================================================
    Quiz Vocacional Inteli — v3
-   Fluxo: intro → dados pessoais → 8 afirmações → resultado + feedback → envio
+   Fluxo: intro → dados pessoais → 12 afirmações → resultado + feedback → envio
 
-   Sem pergunta adaptativa: nesta versão todos respondem os mesmos 8 itens.
+   Sem pergunta adaptativa: nesta versão todos respondem os mesmos 12 itens.
    Ver README.md para o porquê.
    ============================================================ */
 
@@ -212,6 +212,11 @@ function renderResultado() {
       <h4>Sua afinidade com os 5 cursos <span class="scale-hint">0 a 5</span></h4>
       <div id="distances-list"></div>
     </div>
+
+    <div class="respostas">
+      <h4>Suas respostas</h4>
+      <div id="respostas-list"></div>
+    </div>
   `;
   app.appendChild(card);
 
@@ -229,6 +234,19 @@ function renderResultado() {
       <div class="dist-value">${af.toFixed(1)}</div>
     `;
     distEl.appendChild(row);
+  });
+
+  const respEl = card.querySelector("#respostas-list");
+  NUCLEO.forEach((pergunta) => {
+    const valor = flow.estado.respostas[pergunta.id];
+    const opt = SCALE.find((s) => s.value === valor);
+    const row = document.createElement("div");
+    row.className = "resposta-row";
+    row.innerHTML = `
+      <div class="resposta-pergunta">${pergunta.texto}</div>
+      <div class="resposta-valor"><strong>R:</strong> ${opt ? opt.label : "—"}</div>
+    `;
+    respEl.appendChild(row);
   });
 }
 

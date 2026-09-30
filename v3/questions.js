@@ -28,6 +28,22 @@
      embutido ("a só X" / "mais do que só X"), que enviesava qualquer
      respondente a concordar (viés de aquiescência) independente da disposição
      real — achado do feedback qualitativo de alunos de CC/ES/EC na v3.
+   - Reteste pareado das 2 pessoas de EC que já tinham caído em CC mostrou
+     um viés na direção oposta: `A2`, ao perder toda comparação (não só o
+     "só"), virou afirmação isolada e sem custo — as duas pessoas escalaram
+     pra concordância máxima nela, inflando Amplitude perto do teto. `C1` e
+     `C2` tinham o mesmo risco (sem custo nem comparação) e foram reforçadas
+     por precaução, mesmo sem evidência direta ainda. `A1`, `M2`, `C3`, `M3`
+     já tinham algum tipo de âncora implícita e não mostraram esse padrão —
+     mantidas como estavam.
+   - `M1` reforçado por um motivo diferente: das 7 respostas reais coletadas
+     até aqui, 6 concordaram (+2 ou +3) e só 1 discordou — desbalanceamento
+     bem maior que `M2`/`M3`. Não é falta de custo no texto (já tinha "antes
+     de construir"); é que "entender antes de agir" soa como a resposta
+     madura, então tende a puxar concordância mesmo de quem não age assim na
+     prática (viés de desejabilidade do próprio conteúdo, não da redação).
+     Adicionado um custo que a cultura tech já reconhece como válido
+     (aprendizado rápido por tentativa), não só "leva mais tempo".
    ============================================================ */
 
 // Escala de concordância com ponto neutro no centro: sinal indica o polo do
@@ -76,21 +92,88 @@ const NOME_CURSO = {
 };
 
 /* ------------------------------------------------------------
-   Núcleo: 8 afirmações, respondidas por todos numa escala de concordância.
-   Não há pergunta adaptativa nesta versão — decisão deliberada, ver README.
+   Núcleo: 12 afirmações (4 por eixo), respondidas por todos numa escala de
+   concordância. Não há pergunta adaptativa nesta versão — decisão
+   deliberada, ver README.
 
    Cada afirmação está redigida para que concordar mova o eixo para o polo
    "alto" (mesmo sentido que o antigo poloB): camada 3 = hardware/fundamentos,
    amplitude 2 = especialista, modo 2 = investigador. Discordar move para o
-   polo "baixo" (antigo poloA).
+   polo "baixo" (antigo poloA) — EXCETO `M4`, que é de chave invertida (ver
+   abaixo).
 
    Redação sem contraste embutido (ver DocumentosRef/Inteli_Quiz_v2_Diagnostico_e_Revisao_Perguntas.md):
    a primeira leva de afirmações usava construções tipo "a só X" / "mais do
-   que só X", que rotulavam o polo baixo como insuficiente e enviesavam
-   qualquer respondente a concordar (viés de aquiescência), independente da
-   disposição real — visível no padrão de Modo alto em quase todo mundo
-   testado, mesmo gente de cursos diferentes. Cada afirmação agora descreve
-   um único comportamento, sem comparação textual ao polo oposto.
+   que só X", que rotulavam o polo baixo como insuficiente — corrigido.
+
+   De volta ao estilo direto, sem cláusula de custo ("mesmo que..."): tentar
+   blindar cada item individualmente contra viés de desejabilidade (seja via
+   "só X", seja via "mesmo que X") sempre acabou sinalizando qual resposta é
+   "a correta" de um jeito ou de outro. A correção agora é estrutural, não
+   por item: foi de 8 para 12 perguntas (4 por eixo em vez de 2-3), diluindo
+   o peso de qualquer item imperfeito sozinho — mesma lógica usada em testes
+   de personalidade validados (Big Five/IPIP), que não dependem de nenhum
+   item ser perfeitamente neutro.
+
+   `M4` é o primeiro item de "chave invertida" do banco: concordar descreve
+   o comportamento CONSTRUTOR (aprender testando na prática), não
+   INVESTIGADOR como os outros 3 itens de Modo. Isso veio de um achado
+   concreto: em 7 respostas reais coletadas, `M1` teve 6 concordâncias e só
+   1 discordância — "entender antes de agir" soa como a resposta madura,
+   então o desequilíbrio pode vir do conteúdo em si, não da redação. Um item
+   invertido dá ao perfil construtor uma frase pra concordar (em vez de
+   depender de discordar de uma frase que soa prudente) — por isso seu peso
+   é negativo, ver PASSO abaixo sobre soma de pesos em módulo.
+   - `A2`/`A4` reescritos: a versão anterior ("no fim do ano..." / "ser a
+     pessoa de referência...") não forçava exclusividade real — dá pra
+     aprofundar um assunto E aprender vários outros no mesmo ano, então
+     marcar Neutro nelas era a resposta logicamente correta pra quem
+     percebeu isso, não indecisão. Isso zera a resposta em vez de puxar
+     o eixo, deixando `A1`/`A3` decidirem sozinhas. Agora as 4 perguntas de
+     Amplitude forçam escolha sobre um recurso genuinamente limitado (um
+     projeto, um curso, um hobby, um papel em grupo — só dá pra escolher um).
+   - `C4`, `M1`, `M2`, `M3`, `A3`, `M4` reescritos por redundância de
+     conteúdo, não de viés: várias perguntas do mesmo eixo repetiam o mesmo
+     cenário ("trava"/"travou") ou o mesmo molde de frase (X só vs. vários Y
+     diferentes), então mediam a mesma faceta duas vezes em vez de somar
+     sinal independente. Cada uma trocou de domínio — escolha de tarefa num
+     projeto, resolver e continuar curioso, explicar pra alguém,
+     planejamento em grupo, festa, decisão rápida — mantendo a mesma
+     intenção de eixo. `M1` só ficou redundante depois que `M4` migrou pra
+     uma formulação mais genérica de "agir rápido vs. entender antes"; `C4`
+     precisou de uma segunda rodada porque a primeira reescrita (vídeo)
+     trocou só o meio, não o conteúdo — continuava sendo "entender por
+     dentro vs. só usar", igual ao `C2`.
+   - `M3` e `C4` tiveram uma 2ª rodada por viés institucional, não
+     redundância: "parar pra mapear o problema antes de dividir tarefas"
+     (`M3`) e "cuidar da parte técnica vs. entender necessidades de quem
+     usa" (`C4`) são literalmente etapas do método de projeto ensinado a
+     todo aluno do Inteli (PBL), então tendiam a concordância quase
+     unânime ou a respostas fracamente neutras — não discriminam curso,
+     medem se a pessoa aprendeu a metodologia. Reescritos para sair do
+     vocabulário de metodologia de projeto.
+   - `A3` reescrito de "festa ou evento" pra "grupo de estudos": o cenário
+     era de fora do ambiente acadêmico, o que não faz sentido pra um quiz
+     de orientação vocacional.
+   - 3ª rodada: `C4` ("parte técnica vs. financeira/comercial") ficou
+     direto demais — separava tecnologia de administração de um jeito
+     legível, quase perguntando "você quer ser ADM Tech?" diretamente,
+     contra o princípio de nunca revelar a lógica de pontuação (ver
+     Inteli_Quiz_Contexto_Completo.md, seção 11). Trocado de estrutura de
+     tarefa-escolhida pra curiosidade espontânea, no molde do `C1`/`C3`.
+     `A3` também mudou de novo: "aprofundar vs. vários tópicos" já estava
+     coberto por `A1`/`A2`/`A4` — passou a medir a outra metade da
+     definição de Integrador ("conecta áreas, traduz entre mundos", ver
+     Inteli_Quiz_Contexto_Completo.md, seção 3), não testada até aqui.
+   - `M1` trocado de novo: "continuar investigando depois de já ter
+     resolvido" era vago demais (nenhum cenário concreto pra imaginar),
+     e ficou repetidamente neutro/zero nos testes reais por causa disso.
+     Substituído por um cenário concreto e individual — um projeto que não
+     saiu como esperado — que nenhum outro item de Modo cobre mais.
+   - `C4` e `A3` tiveram uma 4ª rodada por colisão de vocabulário, não de
+     cenário: `C4` repetia "funciona por dentro" do `C2` quase literalmente,
+     e `A3` repetia "aprofundar bastante... só" do `A2`. Mesmo cenário novo,
+     mesma frase antiga — trocado o vocabulário de verdade dessa vez.
    ------------------------------------------------------------ */
 const NUCLEO = [
   {
@@ -99,11 +182,11 @@ const NUCLEO = [
   },
   {
     id: "A1", eixo: "amplitude", peso: 1.0,
-    texto: "Entre dois projetos possíveis, eu escolheria o que entra fundo em um problema, onde eu precisasse dominar bem aquele assunto.",
+    texto: "Entre dois projetos possíveis, eu escolheria o que entra fundo em um único tema, onde eu precisasse dominar bem aquele assunto.",
   },
   {
     id: "M1", eixo: "modo", peso: 1.0,
-    texto: "Diante de um problema difícil, meu primeiro impulso é parar para entender a causa a fundo antes de começar a construir algo.",
+    texto: "Quando um projeto meu não sai como eu esperava, prefiro entender bem o que deu errado antes de tentar de novo com outra abordagem.",
   },
   {
     id: "C2", eixo: "camada", peso: 1.0,
@@ -111,11 +194,11 @@ const NUCLEO = [
   },
   {
     id: "M2", eixo: "modo", peso: 1.0,
-    texto: "No fim de um projeto, o que me deixa mais satisfeito é ter entendido por que o problema acontecia e qual era o melhor jeito de resolver.",
+    texto: "Quando alguém me pergunta como resolver algo, prefiro explicar o raciocínio todo por trás da solução a indicar diretamente o que fazer.",
   },
   {
     id: "A2", eixo: "amplitude", peso: 1.0,
-    texto: "No fim de um ano, gostaria de poder dizer que fiquei muito bom em uma coisa difícil.",
+    texto: "Se eu tivesse tempo pra fazer apenas um curso extra este semestre, eu escolheria um que aprofunda bastante um assunto só, em vez de um que passa por vários temas diferentes.",
   },
   {
     id: "C3", eixo: "camada", peso: 0.8,
@@ -123,25 +206,45 @@ const NUCLEO = [
   },
   {
     id: "M3", eixo: "modo", peso: 0.8,
-    texto: "Em um trabalho em grupo que travou, meu impulso costuma ser investigar a causa do travamento antes de continuar.",
+    texto: "Em um projeto em grupo, meu impulso costuma ser confirmar por que um problema está acontecendo antes de seguir com a solução que alguém propõe.",
+  },
+  {
+    id: "C4", eixo: "camada", peso: 1.0,
+    texto: "Fico mais curioso(a) sobre os detalhes técnicos de uma tecnologia do que sobre quanto ela custa pra desenvolver ou quanto pode gerar de receita.",
+  },
+  {
+    id: "A3", eixo: "amplitude", peso: 1.0,
+    texto: "Prefiro ser conhecido(a) por saber muito sobre um assunto específico a ser conhecido(a) por se virar bem em áreas bem diferentes.",
+  },
+  {
+    id: "A4", eixo: "amplitude", peso: 1.0,
+    texto: "Em um projeto em grupo, eu escolheria ser a pessoa que domina uma parte técnica específica a fundo, não a pessoa que entende um pouco de cada parte.",
+  },
+  {
+    id: "M4", eixo: "modo", peso: -1.0,
+    texto: "Prefiro decidir rápido e ajustar o rumo depois a passar muito tempo reunindo informações antes de agir.",
   },
 ];
 
 /* ------------------------------------------------------------
    Passo de cada eixo — derivado, não escolhido.
 
-   passo = (faixa / 2) / (SCALE_MAX × soma dos pesos dos itens do eixo)
+   passo = (faixa / 2) / (SCALE_MAX × soma dos pesos dos itens do eixo, em módulo)
+
+   Soma em módulo porque `M4` tem peso negativo (item de chave invertida):
+   o que importa pro alcance máximo do eixo é o quanto cada item PODE
+   empurrar, não o sinal de quem empurra pra qual lado.
 
    O estado começa no centro da faixa (ver CENTRO), então só precisa
    percorrer metade da faixa para alcançar qualquer um dos extremos.
    Isso garante que concordar/discordar totalmente em TODOS os itens do
-   eixo, no mesmo sentido, chegue exatamente ao extremo da faixa — sem
-   ultrapassar e sem saturar antes disso. Na v1 o passo era fixo e ±1 já
-   saturava o eixo, o que fazia a escala de 4 pontos funcionar como uma
-   de 2 pontos.
+   eixo, no sentido que empurra pro mesmo lado, chegue exatamente ao
+   extremo da faixa — sem ultrapassar e sem saturar antes disso. Na v1 o
+   passo era fixo e ±1 já saturava o eixo, o que fazia a escala de 4 pontos
+   funcionar como uma de 2 pontos.
    ------------------------------------------------------------ */
 const SOMA_PESOS = NUCLEO.reduce((acc, q) => {
-  acc[q.eixo] = (acc[q.eixo] || 0) + q.peso;
+  acc[q.eixo] = (acc[q.eixo] || 0) + Math.abs(q.peso);
   return acc;
 }, {});
 
@@ -211,16 +314,20 @@ function calcularDistancias(estado) {
 
 /* ------------------------------------------------------------
    Classificação — limiares derivados da distribuição real do modelo
-   (enumeração das 7^8 = 5.764.801 combinações de resposta possíveis da
-   escala de 7 níveis, com neutro), não escolhidos a olho. Re-derivados
-   depois de: dilema A/B (4 níveis, 65.536 combinações) → afirmação única
-   sem neutro (6 níveis, 1.679.616) → afirmação única com neutro (7 níveis,
-   atual) — ver DocumentosRef/Inteli_Quiz_v2_Diagnostico_e_Revisao_Perguntas.md.
+   (enumeração exaustiva das 7^12 = 13.841.287.201 combinações de resposta
+   possíveis, 4 perguntas por eixo), não escolhidos a olho. Grande demais
+   pra listar uma a uma, mas tratável agrupando por soma única por eixo
+   (103 × 25 × 103 = 265.225 estados combinados, cada um com sua
+   contagem/peso) — mesmo resultado da enumeração completa, sem precisar
+   materializar 13,8 bilhões de linhas. Re-derivados depois de: dilema A/B
+   (4 níveis, 65.536) → afirmação única sem neutro (6 níveis, 1.679.616) →
+   com neutro (7 níveis, 8 perguntas, 5.764.801) → 12 perguntas (atual) —
+   ver DocumentosRef/Inteli_Quiz_v2_Diagnostico_e_Revisao_Perguntas.md.
    ------------------------------------------------------------ */
 const LIMIAR = {
-  gapFronteira: 0.091, // percentil 12 dos gaps  → ~12% em fronteira
-  d1Ancora: 1.169,     // percentil 50 das distâncias ao curso mais próximo
-  d1Orfao: 1.567,      // percentil 90  → ~10% de órfãos
+  gapFronteira: 0.083, // percentil 12 dos gaps  → ~12% em fronteira
+  d1Ancora: 1.182,     // percentil 50 das distâncias ao curso mais próximo
+  d1Orfao: 1.522,      // percentil 90  → ~10% de órfãos
 };
 
 function classificar(dists) {
