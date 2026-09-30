@@ -144,6 +144,36 @@ const NOME_CURSO = {
      precisou de uma segunda rodada porque a primeira reescrita (vídeo)
      trocou só o meio, não o conteúdo — continuava sendo "entender por
      dentro vs. só usar", igual ao `C2`.
+   - `M3` e `C4` tiveram uma 2ª rodada por viés institucional, não
+     redundância: "parar pra mapear o problema antes de dividir tarefas"
+     (`M3`) e "cuidar da parte técnica vs. entender necessidades de quem
+     usa" (`C4`) são literalmente etapas do método de projeto ensinado a
+     todo aluno do Inteli (PBL), então tendiam a concordância quase
+     unânime ou a respostas fracamente neutras — não discriminam curso,
+     medem se a pessoa aprendeu a metodologia. Reescritos para sair do
+     vocabulário de metodologia de projeto.
+   - `A3` reescrito de "festa ou evento" pra "grupo de estudos": o cenário
+     era de fora do ambiente acadêmico, o que não faz sentido pra um quiz
+     de orientação vocacional.
+   - 3ª rodada: `C4` ("parte técnica vs. financeira/comercial") ficou
+     direto demais — separava tecnologia de administração de um jeito
+     legível, quase perguntando "você quer ser ADM Tech?" diretamente,
+     contra o princípio de nunca revelar a lógica de pontuação (ver
+     Inteli_Quiz_Contexto_Completo.md, seção 11). Trocado de estrutura de
+     tarefa-escolhida pra curiosidade espontânea, no molde do `C1`/`C3`.
+     `A3` também mudou de novo: "aprofundar vs. vários tópicos" já estava
+     coberto por `A1`/`A2`/`A4` — passou a medir a outra metade da
+     definição de Integrador ("conecta áreas, traduz entre mundos", ver
+     Inteli_Quiz_Contexto_Completo.md, seção 3), não testada até aqui.
+   - `M1` trocado de novo: "continuar investigando depois de já ter
+     resolvido" era vago demais (nenhum cenário concreto pra imaginar),
+     e ficou repetidamente neutro/zero nos testes reais por causa disso.
+     Substituído por um cenário concreto e individual — um projeto que não
+     saiu como esperado — que nenhum outro item de Modo cobre mais.
+   - `C4` e `A3` tiveram uma 4ª rodada por colisão de vocabulário, não de
+     cenário: `C4` repetia "funciona por dentro" do `C2` quase literalmente,
+     e `A3` repetia "aprofundar bastante... só" do `A2`. Mesmo cenário novo,
+     mesma frase antiga — trocado o vocabulário de verdade dessa vez.
    ------------------------------------------------------------ */
 const NUCLEO = [
   {
@@ -152,11 +182,11 @@ const NUCLEO = [
   },
   {
     id: "A1", eixo: "amplitude", peso: 1.0,
-    texto: "Entre dois projetos possíveis, eu escolheria o que entra fundo em um problema, onde eu precisasse dominar bem aquele assunto.",
+    texto: "Entre dois projetos possíveis, eu escolheria o que entra fundo em um único tema, onde eu precisasse dominar bem aquele assunto.",
   },
   {
     id: "M1", eixo: "modo", peso: 1.0,
-    texto: "Depois de resolver um problema, tenho vontade de continuar investigando por que a solução funcionou.",
+    texto: "Quando um projeto meu não sai como eu esperava, prefiro entender bem o que deu errado antes de tentar de novo com outra abordagem.",
   },
   {
     id: "C2", eixo: "camada", peso: 1.0,
@@ -176,15 +206,15 @@ const NUCLEO = [
   },
   {
     id: "M3", eixo: "modo", peso: 0.8,
-    texto: "Num projeto em grupo, prefiro que a gente pare pra mapear o problema todo antes de dividir tarefas e começar a produzir.",
+    texto: "Em um projeto em grupo, meu impulso costuma ser confirmar por que um problema está acontecendo antes de seguir com a solução que alguém propõe.",
   },
   {
     id: "C4", eixo: "camada", peso: 1.0,
-    texto: "Se eu pudesse escolher uma tarefa num projeto, prefiro cuidar da parte técnica — código, hardware ou infraestrutura — a cuidar da parte que exige entender as necessidades de quem vai usar o produto.",
+    texto: "Fico mais curioso(a) sobre os detalhes técnicos de uma tecnologia do que sobre quanto ela custa pra desenvolver ou quanto pode gerar de receita.",
   },
   {
     id: "A3", eixo: "amplitude", peso: 1.0,
-    texto: "Numa festa ou evento, prefiro ficar batendo papo a fundo com poucas pessoas sobre um assunto do que circular e trocar uma ideia rápida com várias pessoas diferentes.",
+    texto: "Prefiro ser conhecido(a) por saber muito sobre um assunto específico a ser conhecido(a) por se virar bem em áreas bem diferentes.",
   },
   {
     id: "A4", eixo: "amplitude", peso: 1.0,
