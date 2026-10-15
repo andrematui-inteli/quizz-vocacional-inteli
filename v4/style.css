@@ -1,4 +1,5 @@
 :root {
+  --font: 'Platypi', Georgia, serif;
   --ink: #2A1F47;
   --ink-2: #3A2E5C;
   --ink-soft: #4A3F67;
@@ -19,7 +20,7 @@
 html, body {
   min-height: 100%;
   background: var(--paper);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
   background-image: radial-gradient(circle, rgba(42, 31, 71, 0.05) 1px, transparent 1px);
@@ -38,11 +39,10 @@ header.top {
   align-items: flex-start;
   margin-bottom: 28px;
   padding-bottom: 20px;
-  border-bottom: 1px solid var(--line-strong);
 }
 
 .eyebrow {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font);
   font-size: 11px;
   letter-spacing: 0.22em;
   color: var(--coral);
@@ -51,7 +51,7 @@ header.top {
 }
 
 h1 {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font);
   font-weight: 500;
   font-size: 34px;
   line-height: 1;
@@ -66,7 +66,7 @@ h1 em {
 }
 
 .header-meta {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font);
   font-size: 11px;
   color: var(--ink-soft);
   letter-spacing: 0.06em;
@@ -78,7 +78,7 @@ h1 em {
   height: 4px;
   background: var(--line);
   border-radius: 2px;
-  margin-bottom: 24px;
+  margin-bottom: 44px;
   overflow: hidden;
 }
 .progress-fill {
@@ -105,7 +105,7 @@ h1 em {
 .lead:last-of-type { margin-bottom: 28px; }
 
 .tag-adapt {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font);
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -119,7 +119,7 @@ h1 em {
   background: none;
   padding: 0;
   margin-bottom: 16px;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font);
   font-size: 12px;
   font-weight: 500;
   color: var(--ink-soft);
@@ -128,12 +128,13 @@ h1 em {
 .btn-back:hover { color: var(--coral); }
 
 .question-text {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font);
   font-weight: 600;
-  font-size: 24px;
-  line-height: 1.25;
+  font-size: 20px;
+  line-height: 1.3;
+  text-align: justify;
   color: var(--ink);
-  margin-bottom: 24px;
+  margin-bottom: 36px;
 }
 
 .scale {
@@ -153,7 +154,7 @@ h1 em {
   background: none;
   padding: 4px 2px 2px;
   cursor: pointer;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font);
 }
 
 /* Faixa de altura fixa: as bolinhas ficam centralizadas na mesma linha
@@ -190,7 +191,7 @@ h1 em {
 }
 
 .scale-label {
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.25;
   font-weight: 500;
   color: var(--ink-soft);
@@ -203,7 +204,7 @@ h1 em {
 }
 
 .btn-primary, .btn-secondary {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font);
   font-weight: 600;
   font-size: 14px;
   border-radius: 8px;
@@ -230,7 +231,7 @@ h1 em {
 /* RESULTADO */
 .profile-tag {
   display: inline-block;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font);
   font-size: 10px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -245,7 +246,7 @@ h1 em {
 .tag-orfao     { background: rgba(184,58,82,0.14);  color: var(--c-orfao); }
 
 .interpretation {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font);
   font-style: italic;
   font-size: 20px;
   line-height: 1.4;
@@ -261,7 +262,7 @@ h1 em {
   margin-bottom: 20px;
 }
 .verdict-card .label {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font);
   font-size: 9px;
   letter-spacing: 0.2em;
   color: var(--coral);
@@ -269,7 +270,7 @@ h1 em {
   margin-bottom: 6px;
 }
 .verdict-card .course {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font);
   font-weight: 700;
   font-size: 26px;
   color: var(--ink);
@@ -285,7 +286,7 @@ h1 em {
 .devolutiva strong { color: var(--ink); }
 
 .distances h4 {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font);
   font-size: 10px;
   letter-spacing: 0.18em;
   color: var(--ink);
@@ -318,7 +319,7 @@ h1 em {
 .dist-bar-fill.second  { background: var(--ink); }
 .dist-bar-fill.other   { background: rgba(42,31,71,0.3); }
 .dist-value {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font);
   font-size: 11px;
   color: var(--ink-soft);
   text-align: right;
@@ -330,7 +331,7 @@ h1 em {
   border-top: 1px solid var(--line);
 }
 .respostas h4 {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font);
   font-size: 10px;
   letter-spacing: 0.18em;
   color: var(--ink);
@@ -354,7 +355,7 @@ h1 em {
   margin-bottom: 8px;
 }
 .resposta-valor {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font);
   font-size: 11px;
   font-weight: 500;
   color: var(--coral);
@@ -381,7 +382,7 @@ h1 em {
 .field select,
 .field textarea {
   width: 100%;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font);
   font-size: 14px;
   color: var(--ink);
   border: 1px solid var(--line-strong);
@@ -421,7 +422,7 @@ h1 em {
 /* Destaque do curso real na lista de distâncias do resultado */
 .badge-seu {
   display: inline-block;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font);
   font-size: 8px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -452,7 +453,7 @@ h1 em {
 }
 
 .compare-title {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font);
   font-size: 10px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -461,7 +462,7 @@ h1 em {
 }
 
 .compare-badge {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font);
   font-size: 9px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -483,7 +484,7 @@ h1 em {
 }
 
 .compare-course-label {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font);
   font-size: 9px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -492,7 +493,7 @@ h1 em {
 }
 
 .compare-course-name {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font);
   font-weight: 600;
   font-size: 18px;
   line-height: 1.15;
@@ -500,7 +501,7 @@ h1 em {
 }
 
 .compare-arrow {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font);
   font-size: 18px;
   color: var(--line-strong);
 }
@@ -528,7 +529,7 @@ h1 em {
 }
 
 .compare-metric-value {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font);
   font-size: 13px;
   font-weight: 500;
   color: var(--ink);
@@ -541,6 +542,17 @@ h1 em {
   color: var(--ink-soft);
 }
 
+/* Textos corridos justificados (a pergunta já é justificada em .question-text) */
+.lead,
+.interpretation,
+.devolutiva,
+.resposta-pergunta,
+.field label,
+.compare-note,
+.compare-scale-note {
+  text-align: justify;
+}
+
 @media (max-width: 480px) {
   .scale { gap: 0; }
   .scale-btn { padding: 4px 1px 2px; }
@@ -549,7 +561,7 @@ h1 em {
   .scale-dot.mag-1 { width: 16px; height: 16px; }
   .scale-dot.mag-2 { width: 25px; height: 25px; }
   .scale-dot.mag-3 { width: 34px; height: 34px; }
-  .scale-label { font-size: 8.5px; }
+  .scale-label { font-size: 9.5px; }
   .dist-row { grid-template-columns: 100px 1fr 30px; }
   .compare-courses { grid-template-columns: 1fr; text-align: left; }
   .compare-arrow { display: none; }
