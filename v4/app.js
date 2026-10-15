@@ -48,7 +48,7 @@ function renderHeader(meta) {
       <h1>Quiz <em>Vocacional</em></h1>
     </div>
     <div class="header-meta">
-      ${meta || "3–5 minutos"}
+      ${meta || "3 a 5 minutos"}
     </div>
   `;
   app.appendChild(header);
@@ -60,14 +60,14 @@ function renderIntro() {
   card.className = "card intro";
   card.innerHTML = `
     <p class="lead">
-      Este quiz não pergunta "qual curso você prefere". Ele te conhece por três ângulos —
+      Este quiz não pergunta "qual curso você prefere". Ele te conhece por três ângulos:
       o quanto você quer entrar por dentro da tecnologia, se você prefere circular entre
-      assuntos ou mergulhar fundo em um, e se sua cabeça age primeiro ou entende primeiro —
-      e só então cruza esse perfil com o curso do Inteli que mais combina com você.
+      assuntos ou mergulhar fundo em um, e se sua cabeça age primeiro ou entende primeiro.
+      Só então cruza esse perfil com o curso do Inteli que mais combina com você.
       São ${NUCLEO.length} perguntas gerais e, no final, 3 perguntas mais específicas para refinar o resultado.
     </p>
     <p class="lead">Responda com o que soa mais verdadeiro, não com o que parece "a resposta certa". Não existe resposta errada.</p>
-    <p class="lead"><strong>Esta é uma versão de teste.</strong> Vamos te pedir seu nome e o curso que você já faz no Inteli para comparar com o resultado, e no final um feedback rápido. Isso ajuda a calibrar o modelo — obrigado por participar!</p>
+    <p class="lead"><strong>Esta é uma versão de teste.</strong> Vamos te pedir seu nome e o curso que você já faz no Inteli para comparar com o resultado, e no final um feedback rápido. Isso ajuda a calibrar o modelo. Obrigado por participar!</p>
     <button class="btn-primary" id="start-btn">Começar</button>
   `;
   app.appendChild(card);
@@ -166,11 +166,16 @@ function renderQuestao(pergunta, { meta, passoAtual, total, podeVoltar, aoRespon
   }
 }
 
+// Todos os blocos têm o mesmo número de itens. A barra de progresso já reserva
+// esse trecho nas perguntas gerais, para não chegar a 100% na 9ª e ainda haver
+// perguntas pela frente.
+const ITENS_BLOCO = BLOCOS[0].itens.length;
+
 function renderPergunta(pergunta, passoAtual) {
   renderQuestao(pergunta, {
     meta: `Pergunta ${passoAtual} de ${NUCLEO.length}`,
     passoAtual,
-    total: NUCLEO.length,
+    total: NUCLEO.length + ITENS_BLOCO,
     podeVoltar: passoAtual > 1,
     aoResponder: (valor) => {
       aplicarResposta(flow.estado, pergunta, valor);
@@ -183,8 +188,8 @@ function renderPerguntaBloco() {
   const item = flow.bloco.itens[flow.indiceBloco];
   renderQuestao(item, {
     meta: `Pergunta final ${flow.indiceBloco + 1} de ${flow.bloco.itens.length}`,
-    passoAtual: flow.indiceBloco + 1,
-    total: flow.bloco.itens.length,
+    passoAtual: NUCLEO.length + flow.indiceBloco + 1,
+    total: NUCLEO.length + flow.bloco.itens.length,
     podeVoltar: true, // da 1ª pergunta final volta para a última geral
     aoResponder: (valor) => {
       flow.respostasBloco[item.id] = valor;
@@ -266,7 +271,7 @@ function renderRespostas(container, itens, respostas) {
     row.className = "resposta-row";
     row.innerHTML = `
       <div class="resposta-pergunta">${pergunta.texto}</div>
-      <div class="resposta-valor"><strong>R:</strong> ${opt ? opt.label : "—"}</div>
+      <div class="resposta-valor"><strong>R:</strong> ${opt ? opt.label : "Sem resposta"}</div>
     `;
     container.appendChild(row);
   });
@@ -416,7 +421,7 @@ function renderBlocoComparacao(a) {
           <div class="compare-course-name">${NOME_CURSO[a.cursoReal]}</div>
         </div>
       </div>
-      <p class="compare-scale-note">Os números abaixo são <strong>distâncias</strong> no espaço do modelo — aqui, ao contrário da afinidade acima, menor significa mais perto.</p>
+      <p class="compare-scale-note">Os números abaixo são <strong>distâncias</strong> no espaço do modelo. Aqui, ao contrário da afinidade acima, menor significa mais perto.</p>
       <div class="compare-metrics">
         ${metricas.map(([label, valor]) => `
           <div class="compare-metric">
@@ -545,7 +550,7 @@ function renderEnviado() {
   card.className = "card enviado";
   card.innerHTML = `
     <p class="lead">Obrigado, ${escapeHtml(flow.nome.split(" ")[0])}! Sua resposta foi registrada.</p>
-    ${CONFIG.GAS_URL ? "" : '<p class="lead">Como o envio automático ainda não está configurado, um arquivo com sua resposta foi baixado — por favor envie esse arquivo para quem está coordenando o teste.</p>'}
+    ${CONFIG.GAS_URL ? "" : '<p class="lead">Como o envio automático ainda não está configurado, um arquivo com sua resposta foi baixado. Por favor, envie esse arquivo para quem está coordenando o teste.</p>'}
     <button class="btn-secondary" id="restart-btn">Responder novamente</button>
   `;
   app.appendChild(card);

@@ -438,7 +438,7 @@ function buildDevolutiva(tipo, curso1, curso2, refinamento) {
   const c2 = NOME_CURSO[curso2];
 
   if (tipo === "órfão") {
-    return `Sua combinação é rara e nenhum dos 5 cursos de graduação atende plenamente todos os lados do seu perfil. Indicamos <strong>${c1}</strong> como o mais próximo, mas reconhecemos abertamente a singularidade — vale muito uma conversa com a equipe de orientação para desenhar um caminho sob medida.`;
+    return `Sua combinação é rara e nenhum dos 5 cursos de graduação atende plenamente todos os lados do seu perfil. Indicamos <strong>${c1}</strong> como o mais próximo, mas reconhecemos abertamente a singularidade. Vale muito uma conversa com a equipe de orientação para desenhar um caminho sob medida.`;
   }
   if (refinamento && refinamento.virou) {
     return `Pelas perguntas gerais, o curso mais próximo do seu perfil era <strong>${c2}</strong>. Mas nas três perguntas finais, que separam esses dois cursos, você se identificou mais com <strong>${c1}</strong>. Vale conhecer os dois de perto antes de decidir.`;
@@ -449,12 +449,12 @@ function buildDevolutiva(tipo, curso1, curso2, refinamento) {
   const confirmada = refinamento ? ", e as três perguntas finais confirmaram essa leitura" : "";
 
   if (tipo === "âncora-adjacente") {
-    return `Esse perfil aponta com clareza para <strong>${c1}</strong>${confirmada}. ${c2} aparece como segunda opção compatível, com nuance distinta — vale conhecer as fronteiras entre os dois.`;
+    return `Esse perfil aponta com clareza para <strong>${c1}</strong>${confirmada}. ${c2} aparece como segunda opção compatível, com nuance distinta. Vale conhecer as fronteiras entre os dois.`;
   }
   if (tipo === "fronteira") {
     return refinamento
-      ? `Seu perfil geral ficou quase empatado entre <strong>${c1}</strong> e <strong>${c2}</strong>, e as três perguntas finais desempataram a favor de <strong>${c1}</strong>. ${c2} continua muito próximo — vale conhecer os dois cursos de perto.`
+      ? `Seu perfil geral ficou quase empatado entre <strong>${c1}</strong> e <strong>${c2}</strong>, e as três perguntas finais desempataram a favor de <strong>${c1}</strong>. ${c2} continua muito próximo. Vale conhecer os dois cursos de perto.`
       : `Seu perfil ficou quase empatado entre <strong>${c1}</strong> e <strong>${c2}</strong>. Vale a pena conhecer os dois cursos de perto antes de decidir.`;
   }
-  return `O curso mais próximo do seu perfil é <strong>${c1}</strong>${confirmada}, mas seu perfil tem uma tensão interessante — você não está bem no centro do curso. Isso pode virar um diferencial dentro dele.`;
+  return `O curso mais próximo do seu perfil é <strong>${c1}</strong>${confirmada}, mas seu perfil tem uma tensão interessante: você não está bem no centro do curso. Isso pode virar um diferencial dentro dele.`;
 }
